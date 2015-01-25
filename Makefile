@@ -9,8 +9,9 @@ GLDIR = /System/Library/Frameworks/OpenGL.framework/Libraries/
 FLTKINCDIR = /usr/local/include/
 FLTKLIBDIR = /usr/local/lib/
 
-OBJDIR = ../objs/
-OUTDIR = ../build/
+CODEDIR = cse452shell/
+OBJDIR = objs/
+OUTDIR = build/
 
 MAINOBJ = $(OBJDIR)main.o $(OBJDIR)GLWindow.o $(OBJDIR)ShellInterface.o $(OBJDIR)UIInterface.o
 VECMATHOBJ = $(OBJDIR)ScreenVector.o $(OBJDIR)ScreenPoint.o $(OBJDIR)Vector3.o $(OBJDIR)Point3.o $(OBJDIR)Matrix3.o $(OBJDIR)Vector4.o $(OBJDIR)Matrix4.o
@@ -26,7 +27,7 @@ OBJ = $(MAINOBJ) $(VECMATHOBJ) $(RENDEROBJ)  $(USEROBJ)  $(SCENEOBJ) $(INTERSECT
 
 #LIBS =  -L$(GLDIR) -L$(FLTKLIBDIR) -lfltk -lfltk_gl -lfltk_images -lfltk_forms -lfltk_jpeg -lGLU -lGL -lpng
 LIBS =  -L$(GLDIR) -L$(FLTKLIBDIR) -lfltk -lfltk_gl -lfltk_images -lfltk_forms -lGLU -lGL -lpng
-INCS =  -I$(FLTKINCDIR) -I/usr/X11R6/include -I. -I./vecmath
+INCS =  -I$(FLTKINCDIR) -I/usr/X11R6/include -I. -I$(CODEDIR)vecmath -I$(CODEDIR)
 
 BIN = $(OUTDIR)cse452shell
 CXXFLAGS = $(INCS) -DLINUX -Wextra -std=c++98 -g
@@ -34,7 +35,7 @@ LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++98 -framework Carbon -framework AGL -g
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before cse452shell all-after
+all: all-before $(BIN) all-after
 
 clean: clean-custom
 	rm -f $(OBJ) $(BIN)
@@ -42,31 +43,31 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CXX) $(OBJ) -o "$(OUTDIR)cse452shell" $(LIBS) $(LDFLAGS)
 
-$(MAINOBJ): $(OBJDIR)%.o: %.cpp cse452.h
+$(MAINOBJ): $(OBJDIR)%.o: $(CODEDIR)%.cpp $(CODEDIR)cse452.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(VECMATHOBJ): $(OBJDIR)%.o: vecmath/%.cpp 
+$(VECMATHOBJ): $(OBJDIR)%.o: $(CODEDIR)vecmath/%.cpp 
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(BRUSHOBJ): $(OBJDIR)%.o: brush/%.cpp
+$(BRUSHOBJ): $(OBJDIR)%.o: $(CODEDIR)brush/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(SHAPESOBJ): $(OBJDIR)%.o: shapes/%.cpp
+$(SHAPESOBJ): $(OBJDIR)%.o: $(CODEDIR)shapes/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(CAMERAOBJ): $(OBJDIR)%.o: camera/%.cpp
+$(CAMERAOBJ): $(OBJDIR)%.o: $(CODEDIR)camera/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(SCENEOBJ): $(OBJDIR)%.o: sceneview/%.cpp
+$(SCENEOBJ): $(OBJDIR)%.o: $(CODEDIR)sceneview/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(INTERSECTOBJ): $(OBJDIR)%.o: intersection/%.cpp
+$(INTERSECTOBJ): $(OBJDIR)%.o: $(CODEDIR)intersection/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(USEROBJ): $(OBJDIR)%.o: interactive/%.cpp
+$(USEROBJ): $(OBJDIR)%.o: $(CODEDIR)interactive/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(RENDEROBJ): $(OBJDIR)%.o: rendering/%.cpp
+$(RENDEROBJ): $(OBJDIR)%.o: $(CODEDIR)rendering/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 # shamelessly:

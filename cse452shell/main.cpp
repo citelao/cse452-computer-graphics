@@ -3,6 +3,8 @@
 #include <FL/Fl.H>
 #include <string>
 
+#include <iostream>
+
 static GLWindow *g_saveWindow = NULL;
 
 static void draw_callback( void *in_data )
@@ -25,7 +27,7 @@ void RedrawWindow()
 int main (int argc, char *argv[]) {
 
     std::string str;
-
+    
     ShellInterface shell;
     g_saveWindow = shell.glWindow;
   
