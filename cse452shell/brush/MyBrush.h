@@ -81,7 +81,7 @@ private:
     void filterRegion( );
 
     // declare your extra variables/methods here:
-    std::vector<float> mask;
+    std::vector<double> mask;
 };
 
 inline

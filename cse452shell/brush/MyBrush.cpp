@@ -10,18 +10,33 @@ void MyBrush::changedBrush() {
     const int radius = brushUI->getRadius();
     const BrushType filter = brushUI->getBrushType();
     
+    // Gaussian const
+    // TODO move
+    const double scale = 5;
+    const double sd = 20;
+    const double pi = 3.14159265358979323846;
+    const double a =  1 / (sd * sqrt(2 * pi));
+    const double b = 0;
+    const double c = sd;
+    
     // Create the mask, a 1D array from 0-radius of the different values.
-    mask = std::vector<float>(radius);
+    mask = std::vector<double>(radius);
     switch (filter) {
+        case BRUSH_GAUSSIAN:
+            for (double i = 0; i < radius; i += 1) {
+                mask[i] = scale * a * exp(- ((i-b) * (i-b))/(2 * c * c));
+            }
+            break;
+            
         case BRUSH_QUADRATIC:
-            for (float i = 0; i < radius; i += 1) {
-                mask[i] = sqrt(1 - (i * i) / ((float)radius * (float)radius));
+            for (double i = 0; i < radius; i += 1) {
+                mask[i] = sqrt(1 - (i * i) / ((double)radius * (double)radius));
             }
             break;
             
         case BRUSH_LINEAR:
-            for (float i = 0; i < radius; i += 1) {
-                mask[i] = ((float)radius - i) / (float)radius;
+            for (double i = 0; i < radius; i += 1) {
+                mask[i] = ((double)radius - i) / (double)radius;
             }
             break;
             
@@ -39,8 +54,44 @@ void MyBrush::drawBrush( ) {
     // the mouse location is in mouseDrag
 
     const int radius = brushUI->getRadius();
-    const float pixelFlow = brushUI->getFlow();
+    const double pixelFlow = brushUI->getFlow();
     const Color colBrush = brushUI->getColor();
+    
+    for (double i = -radius; i <= radius; i++) {
+        for (double j = -radius; j <= radius; j++) {
+            double curR = sqrt((i*i) + (j*j));
+            double bw = curR - (int)curR;
+            if(curR > radius) {
+                continue;
+            }
+            
+            Color orig = getPixel(mouseDrag[0] + i, mouseDrag[1] + j);
+            
+            double curMask = mask[curR] * (1 - bw) + mask[curR + 1] * bw;
+            Color interp = colBrush * curMask + orig * (1.0f - curMask);
+            
+            putPixel(mouseDrag[0] + i, mouseDrag[1] + j, interp);
+
+        }
+    }
+}
+
+void MyBrush::drawLine( ) {
+    // draw a thick line from mouseDown to mouseDrag
+    // the width of the line is given by the current brush radius
+    const int radius = brushUI->getRadius();
+    const Color colBrush = brushUI->getColor();
+}
+
+
+void MyBrush::drawCircle() {
+    // draw a thick circle at mouseDown with radius r
+    // the width of the circle is given by the current brush radius
+    const int thickradius = brushUI->getRadius();
+//    const double pixelFlow = brushUI->getFlow();
+    const Color colBrush = brushUI->getColor();
+    
+    const int radius = sqrt(pow(mouseDown[0] - mouseDrag[0], 2) + pow(mouseDown[1] - mouseDrag[1], 2));
     
     // x^2 + y^2 - R^2 > 0 => pt outside of circle
     // (x+1)^2 + (y+.5)^2 - R^2 > 0 => next pt outside of circle
@@ -74,16 +125,16 @@ void MyBrush::drawBrush( ) {
     int de = 12;
     int dne = 8 * y + 18;
     while (x <= -y) {
-        putPixel(mouseDrag[0] + x, mouseDrag[1] + y, colBrush);
-        putPixel(mouseDrag[0] + x, mouseDrag[1] - y, colBrush);
-        putPixel(mouseDrag[0] - x, mouseDrag[1] + y, colBrush);
-        putPixel(mouseDrag[0] - x, mouseDrag[1] - y, colBrush);
+        putPixel(mouseDown[0] + x, mouseDown[1] + y, colBrush);
+        putPixel(mouseDown[0] + x, mouseDown[1] - y, colBrush);
+        putPixel(mouseDown[0] - x, mouseDown[1] + y, colBrush);
+        putPixel(mouseDown[0] - x, mouseDown[1] - y, colBrush);
         
-        putPixel(mouseDrag[0] + y, mouseDrag[1] + x, colBrush);
-        putPixel(mouseDrag[0] + y, mouseDrag[1] - x, colBrush);
-        putPixel(mouseDrag[0] - y, mouseDrag[1] + x, colBrush);
-        putPixel(mouseDrag[0] - y, mouseDrag[1] - x, colBrush);
-
+        putPixel(mouseDown[0] + y, mouseDown[1] + x, colBrush);
+        putPixel(mouseDown[0] + y, mouseDown[1] - x, colBrush);
+        putPixel(mouseDown[0] - y, mouseDown[1] + x, colBrush);
+        putPixel(mouseDown[0] - y, mouseDown[1] - x, colBrush);
+        
         // If we want to move NE, do so
         // Otherwise, E
         if(h > 0) {
@@ -101,30 +152,6 @@ void MyBrush::drawBrush( ) {
             dne += 8;
         }
     }
-    
-//    for (int i = 0; i < radius; i++) {
-//        Color origL = getPixel(mouseDrag[0] - i, mouseDrag[1]);
-//        Color origR = getPixel(mouseDrag[0] + i, mouseDrag[1]);
-//        
-//        Color interpL = colBrush * mask[i] + origL * (1.0f - mask[i]);
-//        Color interpR = colBrush * mask[i] + origR * (1.0f - mask[i]);
-//
-//        putPixel(mouseDrag[0] - i, mouseDrag[1], interpL);
-//        putPixel(mouseDrag[0] + i, mouseDrag[1], interpR);
-//    }
-}
-
-void MyBrush::drawLine( ) {
-    // draw a thick line from mouseDown to mouseDrag
-    // the width of the line is given by the current brush radius
-    const int radius = brushUI->getRadius();
-    const Color colBrush = brushUI->getColor();
-}
-
-
-void MyBrush::drawCircle() {
-    // draw a thick circle at mouseDown with radius r
-    // the width of the circle is given by the current brush radius
 }
 
 
