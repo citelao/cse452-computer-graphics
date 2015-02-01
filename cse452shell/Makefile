@@ -30,7 +30,7 @@ INCS =  -I$(FLTKINCDIR) -I/usr/X11R6/include -I. -I./vecmath
 
 BIN = $(OUTDIR)cse452shell
 CXXFLAGS = $(INCS) -DLINUX -Wextra -std=c++98 -g
-LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++98 -framework Carbon -framework AGL -g
+LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++98 -framework Carbon -framework AGL -gstabs+
 
 .PHONY: all all-before all-after clean clean-custom
 
