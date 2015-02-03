@@ -63,8 +63,8 @@ void MyBrush::drawBrush( ) {
     const double pixelFlow = brushUI->getFlow();
     const Color colBrush = brushUI->getColor();
     
-    for (double i = -radius; i <= radius; i++) {
-        for (double j = -radius; j <= radius; j++) {
+    for (double i = max(-radius, -mouseDrag[0]); i <= min(imageWidth - mouseDrag[0], radius); i++) {
+        for (double j = max(-radius, -mouseDrag[1]); j <= min(imageHeight - mouseDrag[1], radius); j++) {
             double curR = sqrt((i*i) + (j*j));
             double bw = curR - (int)curR;
             if(curR > radius) {
@@ -262,7 +262,6 @@ void MyBrush::drawCircle() {
             putPixel(mouseDown[0] + ox, mouseDown[1] - i, colBrush);
             putPixel(mouseDown[0] - ox, mouseDown[1] + i, colBrush);
             putPixel(mouseDown[0] - ox, mouseDown[1] - i, colBrush);
-            
             putPixel(mouseDown[0] + i, mouseDown[1] + ox, colBrush);
             putPixel(mouseDown[0] + i, mouseDown[1] - ox, colBrush);
             putPixel(mouseDown[0] - i, mouseDown[1] + ox, colBrush);
