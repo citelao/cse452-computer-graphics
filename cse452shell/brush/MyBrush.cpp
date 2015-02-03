@@ -127,27 +127,52 @@ void MyBrush::drawLine( ) {
     //      H = h(0,0) = A + B/2 + C = 2A + B + 2C
     
     // auto-flip points so we always draw L -> R
-    const int x1 = (mouseDown[0] < mouseDrag[0]) ? mouseDrag[0] : mouseDown[0];
-    const int y1 = (mouseDown[0] < mouseDrag[0]) ? mouseDrag[1] : mouseDown[1];
+    int x1 = (mouseDown[0] < mouseDrag[0]) ? mouseDrag[0] : mouseDown[0];
+    int y1 = (mouseDown[0] < mouseDrag[0]) ? mouseDrag[1] : mouseDown[1];
     
-    const int x0 = (mouseDown[0] < mouseDrag[0]) ? mouseDown[0] : mouseDrag[0];
-    const int y0 = (mouseDown[0] < mouseDrag[0]) ? mouseDown[1] : mouseDrag[1];
+    int x0 = (mouseDown[0] < mouseDrag[0]) ? mouseDown[0] : mouseDrag[0];
+    int y0 = (mouseDown[0] < mouseDrag[0]) ? mouseDown[1] : mouseDrag[1];
     
-    const int a = abs(2 * (y1 - y0));
-    const int b = 2 * (x0 - x1);
+    // vague bounds checking
+    double slope = ((double)y1 - (double)y0) / ((double)x1 - (double)x0);
+    int yint = y1 - slope * x1;
+    if (x1 > imageWidth) {
+        // y = mx + b
+        x1 = imageWidth + radius / 2;
+        y1 = slope * x1 + yint;
+    }
     
-    std::cout << "0: (" << x0 << ", " << y0 << ") 1: (" << x1 << ", " << y1 << ")" << std::endl;
-    std::cout << "a: " << a << " b: " << b << std::endl;
+    if (x0 < 0) {
+        x0 = - radius / 2;
+        y0 = slope * x0 + yint;
+    }
+    
+    int a = abs(2 * (y1 - y0));
+    int b = 2 * (x0 - x1);
+    
+    // debug code
+    //std::cout << "0: (" << x0 << ", " << y0 << ") 1: (" << x1 << ", " << y1 << ")" << std::endl;
+    //std::cout << "a: " << a << " b: " << b << std::endl;
     
     if(abs(a) > abs(b)) {
         // traverse by y
         int h = a + 2 * b;
         int x = 0;
         for (int y = 0; y < abs(y1 - y0); y++) {
-            if (y1 < y0) {
-                putPixel(x0 + x, y0 - y, colBrush);
-            } else {
-                putPixel(x0 + x, y0 + y, colBrush);
+            for (int i = - radius / 2; i < radius; i++) {
+                if (x0 + x + i > imageWidth) {
+                    break;
+                }
+                
+                if (x0 + x + i < 0) {
+                    continue;
+                }
+                
+                if (y1 < y0) {
+                    putPixel(x0 + x + i, y0 - y, colBrush);
+                } else {
+                    putPixel(x0 + x + i, y0 + y, colBrush);
+                }
             }
             
             if(h > 0) {
@@ -163,11 +188,13 @@ void MyBrush::drawLine( ) {
         // traverse by x
         int h = 2 * a + b;
         int y = 0;
-        for (int x = 0; x < x1 - x0; x++) {
-            if (y1 < y0) {
-                putPixel(x0 + x, y0 - y, colBrush);
-            } else {
-                putPixel(x0 + x, y0 + y, colBrush);
+        for (int x = max(0, - x0); x < min(x1 - x0, imageWidth - x0); x++) {
+            for (int i = - radius / 2; i < radius; i++) {
+                if (y1 < y0) {
+                    putPixel(x0 + x, y0 - y + i, colBrush);
+                } else {
+                    putPixel(x0 + x, y0 + y + i, colBrush);
+                }
             }
             
             if(h < 0) {
@@ -180,22 +207,6 @@ void MyBrush::drawLine( ) {
             }
         }
     }
-
-    // this works for se
-//        int x = 0;
-//        for (int y = 0; y < y1 - y0; y++) {
-//            putPixel(x0 + x, y0 + y, colBrush); // NE
-//    
-//            if(h > 0) {
-//                // go n
-//                h += b;
-//            } else  {
-//                // go ne
-//                x++;
-//                h += a + b;
-//            }
-//        }
-
 }
 
 

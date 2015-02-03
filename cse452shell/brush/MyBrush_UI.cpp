@@ -91,9 +91,21 @@ void MyBrush::draw() {
             	glVertex2i(mouseDrag[0], mouseDrag[1]);
             	glEnd();
         }
-    } else {
-        // display hover brush preview circle
     }
+    
+    // display hover brush preview circle
+    if(brushUI->getToolType() == TOOL_BRUSH) {
+        int radius = brushUI->getRadius();
+        glLineWidth(1);
+        glBegin(GL_LINE_LOOP);
+        glVertex2i(mouseDrag[0] - radius, mouseDrag[1] - radius);
+        glVertex2i(mouseDrag[0] - radius, mouseDrag[1] + radius);
+        glVertex2i(mouseDrag[0] + radius, mouseDrag[1] + radius);
+        glVertex2i(mouseDrag[0] + radius, mouseDrag[1] - radius);
+        glEnd();
+        
+    }
+    
     endDrawing();
 }
 
