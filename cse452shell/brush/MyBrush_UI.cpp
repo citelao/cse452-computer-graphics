@@ -78,19 +78,21 @@ void MyBrush::draw() {
 		//putPixel( iX, iX, Color(1,0,0) );
 
     glDrawPixels(imageWidth, imageHeight, GL_RGB, GL_UNSIGNED_BYTE, &pixelData[0]);
-
-	// These 5 lines draw a white line across your canvas
-	// Remove this and replace it with intelligent OpenGL preview code
-	glLineWidth( 10);
-	glBegin( GL_LINES );
-	glVertex2i( 100, 100 );
-	glVertex2i( 200, 200 );
-	glEnd();
-
-    // Add in your OpenGL pre-view code here
-
+    
     // display draw in progress (mouse is down)
     if (isMouseDown) {
+        // Preview circle
+        if(brushUI->getToolType() == TOOL_CIRCLE) {
+            
+        } else if(brushUI->getToolType() == TOOL_LINE) {
+            	glLineWidth(brushUI->getRadius());
+            	glBegin(GL_LINES);
+            	glVertex2i(mouseDown[0], mouseDown[1]);
+            	glVertex2i(mouseDrag[0], mouseDrag[1]);
+            	glEnd();
+        }
+    } else {
+        // display hover brush preview circle
     }
     endDrawing();
 }

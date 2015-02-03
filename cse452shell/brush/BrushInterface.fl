@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0303 
 header_name {BrushInterface.h} 
 code_name {BrushInterface.cpp}
 class BrushInterface {open
@@ -7,12 +7,12 @@ class BrushInterface {open
   Function {make_window()} {open
   } {
     Fl_Window m_brushWindow {
-      label {Brush UI} open selected
+      label {Brush UI} open
       xywh {390 225 480 220} type Double resizable
       code0 {\#include "MyBrush.h"} visible
     } {
       Fl_Choice m_iBrushType {
-        label {Brush Type} open
+        label {Brush Type} open selected
         xywh {5 25 180 30} down_box BORDER_BOX align 5
       } {
         MenuItem {} {
@@ -34,6 +34,11 @@ class BrushInterface {open
           label Gaussian
           callback {myBrush.changedBrush();}
           xywh {30 30 100 20}
+        }
+        MenuItem {} {
+          label Special
+          callback {myBrush.changedBrush();}
+          xywh {40 40 100 20}
         }
       }
       Fl_Value_Slider m_iRadius {
@@ -123,7 +128,8 @@ SetPreview();} {}
 m_boxPreview->color( c );
 m_boxPreview->redraw();} {}
   }
-  decl {MyBrush myBrush;} {}
+  decl {MyBrush myBrush;} {private local
+  }
   Function {getBrushType() const} {open return_type {MyBrush::BrushType}
   } {
     code {return (MyBrush::BrushType) m_iBrushType->value();} {}

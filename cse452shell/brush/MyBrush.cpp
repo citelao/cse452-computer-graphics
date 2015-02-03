@@ -20,29 +20,35 @@ void MyBrush::changedBrush() {
     const double c = sd;
     
     // Create the mask, a 1D array from 0-radius of the different values.
-    mask = std::vector<double>(radius);
+    mask = std::vector<double>(radius + 1);
     switch (filter) {
+        case BRUSH_SPECIAL:
+            for (double i = 0; i <= radius; i += 1) {
+                mask[i] = (cos(pi * (i / (double) radius))/2) + 0.5;
+            }
+            break;
+            
         case BRUSH_GAUSSIAN:
-            for (double i = 0; i < radius; i += 1) {
-                mask[i] = scale * a * exp(- ((i-b) * (i-b))/(2 * c * c));
+            for (double i = 0; i <= radius; i += 1) {
+                mask[i] = scale * a * exp(- pow(i-b, 2)/(2 * pow(c, 2)));
             }
             break;
             
         case BRUSH_QUADRATIC:
-            for (double i = 0; i < radius; i += 1) {
-                mask[i] = sqrt(1 - (i * i) / ((double)radius * (double)radius));
+            for (double i = 0; i <= radius; i += 1) {
+                mask[i] = sqrt(1 - pow(i, 2) / pow((double)radius, 2));
             }
             break;
             
         case BRUSH_LINEAR:
-            for (double i = 0; i < radius; i += 1) {
-                mask[i] = ((double)radius - i) / (double)radius;
+            for (double i = 0; i <= radius; i += 1) {
+                mask[i] = 1 - i / (double)radius;
             }
             break;
             
         case BRUSH_CONSTANT:
         default:
-            for (int i = 0; i < radius; i++) {
+            for (int i = 0; i <= radius; i++) {
                 mask[i] = 1.0f;
             }
             break;
@@ -81,6 +87,115 @@ void MyBrush::drawLine( ) {
     // the width of the line is given by the current brush radius
     const int radius = brushUI->getRadius();
     const Color colBrush = brushUI->getColor();
+    
+    // mx + b - y < 0 => point above line
+    //      m = (y1 - y0)/(x1 - x0)
+    //      b = y intercept
+    //
+    //      m(x1) + b - y1 = 0
+    //      b = y1 - m(x1)
+    //      b = y1 - (y1 - y0)x1/(x1 - x0)
+    //
+    // == ax - by + c
+    //      a = y1 - y0
+    //      b = x1 - x0
+    //      c = y1(x1 - x0) - (y1 - y0)x1
+    //        = y1x1 - y1x0 - y1x1 + y0x1
+    //        = y0 * x1 - y1 * x0
+    //
+    // let f(x, y) be posn of point
+    //
+    // for e or ne decn, check f(x+1, y + .5)
+    //  = h(x, y) = a(x+1) - b(y+.5) + c
+    //  = ax + a - by - .5b + c
+    //  =insign= 2ax + 2a - 2by - b + 2c
+    //
+    //  h(x+1, y) = h(x + y) + 2a
+    //  h(x+1, y+1) = h(x+y) + 2a - 2b
+    //
+    // for ne or n decn, check f(x + .5, y + 1)
+    //  = h(x,y) = ax + .5a - by - b + c
+    //  =insign= 2ax + a - 2by - 2b + 2c
+    //
+    //  h(x, y+1) = h(x+y) - 2b;
+    //  h(x+1, y+1) = h(x+y) - 2b + 2a;
+    //
+    // so let
+    //      A = 2a = 2 * (y1 - y0)
+    //      B = -2b = 2 * (x0 - x1)
+    //      C = 2c = 2 * (y0 * x1 - y1 * x0)
+    //      H = h(0,0) = A + B/2 + C = 2A + B + 2C
+    
+    // auto-flip points so we always draw L -> R
+    const int x1 = (mouseDown[0] < mouseDrag[0]) ? mouseDrag[0] : mouseDown[0];
+    const int y1 = (mouseDown[0] < mouseDrag[0]) ? mouseDrag[1] : mouseDown[1];
+    
+    const int x0 = (mouseDown[0] < mouseDrag[0]) ? mouseDown[0] : mouseDrag[0];
+    const int y0 = (mouseDown[0] < mouseDrag[0]) ? mouseDown[1] : mouseDrag[1];
+    
+    const int a = abs(2 * (y1 - y0));
+    const int b = 2 * (x0 - x1);
+    
+    std::cout << "0: (" << x0 << ", " << y0 << ") 1: (" << x1 << ", " << y1 << ")" << std::endl;
+    std::cout << "a: " << a << " b: " << b << std::endl;
+    
+    if(abs(a) > abs(b)) {
+        // traverse by y
+        int h = a + 2 * b;
+        int x = 0;
+        for (int y = 0; y < abs(y1 - y0); y++) {
+            if (y1 < y0) {
+                putPixel(x0 + x, y0 - y, colBrush);
+            } else {
+                putPixel(x0 + x, y0 + y, colBrush);
+            }
+            
+            if(h > 0) {
+                // go n
+                h += b;
+            } else  {
+                // go ne
+                x++;
+                h += a + b;
+            }
+        }
+    } else {
+        // traverse by x
+        int h = 2 * a + b;
+        int y = 0;
+        for (int x = 0; x < x1 - x0; x++) {
+            if (y1 < y0) {
+                putPixel(x0 + x, y0 - y, colBrush);
+            } else {
+                putPixel(x0 + x, y0 + y, colBrush);
+            }
+            
+            if(h < 0) {
+                // go e
+                h += a;
+            } else  {
+                // go ne
+                y++;
+                h += a + b;
+            }
+        }
+    }
+
+    // this works for se
+//        int x = 0;
+//        for (int y = 0; y < y1 - y0; y++) {
+//            putPixel(x0 + x, y0 + y, colBrush); // NE
+//    
+//            if(h > 0) {
+//                // go n
+//                h += b;
+//            } else  {
+//                // go ne
+//                x++;
+//                h += a + b;
+//            }
+//        }
+
 }
 
 
@@ -88,10 +203,9 @@ void MyBrush::drawCircle() {
     // draw a thick circle at mouseDown with radius r
     // the width of the circle is given by the current brush radius
     const int thickradius = brushUI->getRadius();
-//    const double pixelFlow = brushUI->getFlow();
     const Color colBrush = brushUI->getColor();
     
-    const int radius = sqrt(pow(mouseDown[0] - mouseDrag[0], 2) + pow(mouseDown[1] - mouseDrag[1], 2));
+    const int radius = sqrt(pow(mouseDown[0] - mouseDrag[0], 2) + pow(mouseDown[1] - mouseDrag[1], 2)) + (thickradius / 2);
     
     // x^2 + y^2 - R^2 > 0 => pt outside of circle
     // (x+1)^2 + (y+.5)^2 - R^2 > 0 => next pt outside of circle
@@ -119,37 +233,61 @@ void MyBrush::drawCircle() {
     //      = h(x,y) + 8x+12+8y+6
     //      = h(x,y) + 8x+8y+18
     
-    int x = 0;
-    int y = - radius;
-    int h = 5 - 4 * radius * radius + (4 * y * y) + 2 * y;
-    int de = 12;
-    int dne = 8 * y + 18;
-    while (x <= -y) {
-        putPixel(mouseDown[0] + x, mouseDown[1] + y, colBrush);
-        putPixel(mouseDown[0] + x, mouseDown[1] - y, colBrush);
-        putPixel(mouseDown[0] - x, mouseDown[1] + y, colBrush);
-        putPixel(mouseDown[0] - x, mouseDown[1] - y, colBrush);
-        
-        putPixel(mouseDown[0] + y, mouseDown[1] + x, colBrush);
-        putPixel(mouseDown[0] + y, mouseDown[1] - x, colBrush);
-        putPixel(mouseDown[0] - y, mouseDown[1] + x, colBrush);
-        putPixel(mouseDown[0] - y, mouseDown[1] - x, colBrush);
+    int ox = 0;
+    int oy = - radius;
+    int oh = 5 + 2 * oy;
+    int ode = 12;
+    int odne = 8 * oy + 18;
+    
+    int ix = 0;
+    int iy = - radius + thickradius;
+    int ih = 5 + 2 * iy;
+    int ide = 12;
+    int idne = 8 * iy + 18;
+    
+    while (ox <= -oy) {
+        for (int i = oy; i <= iy; i++) {
+            putPixel(mouseDown[0] + ox, mouseDown[1] + i, colBrush);
+            putPixel(mouseDown[0] + ox, mouseDown[1] - i, colBrush);
+            putPixel(mouseDown[0] - ox, mouseDown[1] + i, colBrush);
+            putPixel(mouseDown[0] - ox, mouseDown[1] - i, colBrush);
+            
+            putPixel(mouseDown[0] + i, mouseDown[1] + ox, colBrush);
+            putPixel(mouseDown[0] + i, mouseDown[1] - ox, colBrush);
+            putPixel(mouseDown[0] - i, mouseDown[1] + ox, colBrush);
+            putPixel(mouseDown[0] - i, mouseDown[1] - ox, colBrush);
+        }
         
         // If we want to move NE, do so
         // Otherwise, E
-        if(h > 0) {
-            x++;
-            y++;
+        if(oh > 0) {
+            ox++;
+            oy++;
             
-            h += dne;
-            de += 8;
-            dne += 16;
+            oh += odne;
+            ode += 8;
+            odne += 16;
         } else {
-            x++;
+            ox++;
             
-            h += de;
-            de += 8;
-            dne += 8;
+            oh += ode;
+            ode += 8;
+            odne += 8;
+        }
+        
+        if(ih > 0) {
+            ix++;
+            iy++;
+            
+            ih += idne;
+            ide += 8;
+            idne += 16;
+        } else {
+            ix++;
+            
+            ih += ide;
+            ide += 8;
+            idne += 8;
         }
     }
 }
