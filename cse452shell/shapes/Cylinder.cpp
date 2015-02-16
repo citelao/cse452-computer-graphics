@@ -41,11 +41,11 @@ void Cylinder::draw() {
     
     // Bottom circle
     glBegin(GL_TRIANGLE_FAN);
+        glNormal3d(0.0, -1.0, 0.0);
         glVertex3d(bot[0][0], bot[0][1], bot[0][2]);
     
-//        for(auto i = bot.size() - 1; i >= 1; i--) {
-//            auto pt = bot[i];
-        for(auto pt : bot) {
+        for(auto i = bot.size() - 1; i >= 1; i--) {
+            auto pt = bot[i];
             glNormal3d(0.0, -1.0, 0.0);
             GLfloat n[3];
             glGetFloatv(GL_CURRENT_NORMAL, n);
@@ -65,7 +65,7 @@ void Cylinder::draw() {
             auto tpt = top[i];
             auto bpt = bot[i];
             
-            //            glNormal3d(0.0, pow(-1, i), 0.0);
+            glNormal3d(tpt[0], 0.0, tpt[2]);
             glVertex3d(tpt[0], ty, tpt[2]);
             glVertex3d(bpt[0], by, bpt[2]);
         }

@@ -11,8 +11,6 @@
 #include <GL/glu.h>
 #endif
 
-#include "Cylinder.h"
-
 ShapesUI::ShapesUI() {
     width = height = 0;
 
@@ -68,7 +66,8 @@ void ShapesUI::draw() {
     // ToDo: draw your shape here
     // DO NOT put the actual draw OpenGL code here - put it in the shape class and call the draw method
     
-//    OK, this isn't hard
+    // OK, this isn't hard
+    // Draw some axes
     glBegin(GL_LINES);
     glVertex3f(0.0, 1.0, 0.0);
     glVertex3f(0.0, 0.0, 0.0);
@@ -78,6 +77,9 @@ void ShapesUI::draw() {
     
     glVertex3f(1.0, 0.0, 0.0);
     glVertex3f(0.0, 0.0, 0.0);
+    
+    glVertex3f(0.0, 0.0, 0.0);
+    glVertex3f(1.0, 1.0, 1.0);
     glEnd();
     
     if (currentShape != nullptr) {
@@ -106,8 +108,19 @@ void ShapesUI::change() {
     // If we have not cached this shape yet, create one and store it.
     // Otherwise use the cache.
     if(cachedShape == shapeMap->second.end()) {
-        currentShape = new Cylinder(shapesUI->getTessel1(),
-                                    shapesUI->getTessel2());
+        switch (shapesUI->getShapeType()) {
+            default:
+            case SHAPE_CYLINDER:
+                currentShape = new Cylinder(shapesUI->getTessel1(),
+                                            shapesUI->getTessel2());
+                break;
+                
+            case SHAPE_CUBE:
+                currentShape = new Cube(shapesUI->getTessel1(),
+                                        shapesUI->getTessel2());
+                break;
+        }
+        
         
         std::pair<std::pair<int, int>, Shape*> shapePair = {
             keyPair,

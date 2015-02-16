@@ -7,6 +7,8 @@
 #include "../UIInterface.h"
 #include "../cse452.h"
 #include "Shape.h"
+#include "Cylinder.h"
+#include "Cube.h"
 #include <FL/Fl_Window.H>
 
 class ShapesInterface;
