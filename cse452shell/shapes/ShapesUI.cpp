@@ -93,8 +93,47 @@ int ShapesUI::handle(int event) {
     return 0;
 }
 
-void ShapesUI::change() {
-    auto shapeMap = shapes.find(shapesUI->getShapeType());
+void ShapesUI::change(ShapeType type, int tessel1, int tessel2) {
+    auto cachedShape = getCached(type, tessel1, tessel2);
+    
+    // If we have not cached this shape yet, create one and store it.
+    // Otherwise use the cache.
+    if(cachedShape == nullptr) {
+        switch (type) {
+            default:
+            case SHAPE_CONE: {
+                // Minimum values
+                auto ct1 = (tessel1 >= 3) ? tessel1 : 3;
+                auto ct2 = (tessel2 >= 2) ? tessel2 : 2;
+                currentShape = new Cone(ct1, ct2);
+                break;
+            }
+                
+            case SHAPE_CYLINDER: {
+                auto ct1 = (tessel1 >= 3) ? tessel1 : 3;
+                auto ct2 = (tessel2 >= 1) ? tessel2 : 1;
+                currentShape = new Cylinder(ct1, ct2);
+                break;
+            }
+                
+            case SHAPE_CUBE: {
+                auto ct1 = (tessel1 >= 1) ? tessel1 : 1;
+                auto ct2 = (tessel2 >= 1) ? tessel2 : 1;
+                currentShape = new Cube(ct1, ct2);
+                break;
+            }
+        }
+        
+        cache(currentShape, type, tessel1, tessel2);
+    } else {
+        currentShape = cachedShape;
+    }
+    
+    RedrawWindow();
+}
+
+Shape* ShapesUI::getCached(ShapeType type, int tessel1, int tessel2) {
+    auto shapeMap = shapes.find(type);
     
     if (shapeMap == shapes.end()) {
         // Could not find this type of shape.
@@ -102,50 +141,53 @@ void ShapesUI::change() {
         throw(new std::invalid_argument("We can't draw this shape"));
     }
     
-    auto keyPair = std::make_pair(shapesUI->getTessel1(), shapesUI->getTessel2());
+    auto keyPair = std::make_pair(tessel1, tessel2);
     auto cachedShape = shapeMap->second.find(keyPair);
     
-    // If we have not cached this shape yet, create one and store it.
-    // Otherwise use the cache.
-    if(cachedShape == shapeMap->second.end()) {
-        switch (shapesUI->getShapeType()) {
-            default:
-            case SHAPE_CONE:
-                currentShape = new Cone(shapesUI->getTessel1(),
-                                        shapesUI->getTessel2());
-                break;
-                
-            case SHAPE_CYLINDER:
-                currentShape = new Cylinder(shapesUI->getTessel1(),
-                                            shapesUI->getTessel2());
-                break;
-                
-            case SHAPE_CUBE:
-                currentShape = new Cube(shapesUI->getTessel1(),
-                                        shapesUI->getTessel2());
-                break;
-        }
+    if (cachedShape == shapeMap->second.end()) {
+//        std::cout << "No cached shape for " <<
+//            type << " (" << tessel1 << ", " <<
+//            tessel2 << ")" << std::endl;
         
-        
-        std::pair<std::pair<int, int>, Shape*> shapePair = {
-            keyPair,
-            currentShape
-        };
-        shapeMap->second.insert(shapePair);
-        
-    } else {
-        currentShape = cachedShape->second;
+        return nullptr;
     }
     
-    RedrawWindow();
+    
+//    std::cout << "Found cached shape for " <<
+//    type << " (" << tessel1 << ", " <<
+//    tessel2 << ")" << std::endl;
+    
+    return cachedShape->second;
+    
+}
+
+void ShapesUI::cache(Shape* shape, ShapeType type, int tessel1, int tessel2) {
+    auto shapeMap = shapes.find(type);
+    
+    if (shapeMap == shapes.end()) {
+        // Could not find this type of shape.
+        // This is an error
+        throw(new std::invalid_argument("We can't draw this shape"));
+    }
+
+    auto keyPair = std::make_pair(tessel1, tessel2);
+    std::pair<std::pair<int, int>, Shape*> shapePair = {
+        keyPair,
+        shape
+    };
+    shapeMap->second.insert(shapePair);
 }
 
 void ShapesUI::changedShape()
 {
-    change();
+    change(shapesUI->getShapeType(),
+           shapesUI->getTessel1(),
+           shapesUI->getTessel2());
 }
 
-void ShapesUI::changedTessel( ) {
-    change();
+void ShapesUI::changedTessel() {
+    change(shapesUI->getShapeType(),
+           shapesUI->getTessel1(),
+           shapesUI->getTessel2());
 }
 

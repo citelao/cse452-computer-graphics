@@ -43,7 +43,9 @@ public:
     void setUI( const ShapesInterface *in_ui ) { shapesUI = in_ui; }
 
 private:
-    void change();
+    void change(ShapeType type, int tessel1, int tessel2);
+    Shape* getCached(ShapeType type, int tessel1, int tessel2);
+    void cache(Shape* shape, ShapeType type, int tessel1, int tessel2);
     
     int width, height;
     const ShapesInterface *shapesUI;
