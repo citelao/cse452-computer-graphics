@@ -13,7 +13,7 @@ Cone::Cone(int topdiv, int sidediv) {
     normals = std::vector<double>();
 
     for (int i = 0; i < sidediv; i++) {
-        double h = -1.0 + 2 * (double)i / (double)sidediv;
+        double h = -1.0 + (double)i / (double)sidediv;
         double r = 1.0 - (1.0 + h) / 2.0;
         
         normals.push_back((double)(i + 1) / (double)sidediv);

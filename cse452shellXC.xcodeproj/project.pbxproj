@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		7E442D0B1A92731000009426 /* Sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
+		7E442D0C1A92731000009426 /* Sphere.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
 		7E4C02411A74272300AFF63E /* cse452shell */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = cse452shell; sourceTree = "<group>"; };
 		7E4C02441A74272300AFF63E /* BrushInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrushInterface.cpp; sourceTree = "<group>"; };
 		7E4C02451A74272300AFF63E /* BrushInterface.fl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BrushInterface.fl; sourceTree = "<group>"; };
@@ -840,6 +842,8 @@
 				7EA2FD1B1A91771E00A947B6 /* Cube.h */,
 				7EA2FD1D1A918A9200A947B6 /* Cone.cpp */,
 				7EA2FD1E1A918A9200A947B6 /* Cone.h */,
+				7E442D0B1A92731000009426 /* Sphere.cpp */,
+				7E442D0C1A92731000009426 /* Sphere.h */,
 			);
 			name = ShapeTypes;
 			sourceTree = "<group>";

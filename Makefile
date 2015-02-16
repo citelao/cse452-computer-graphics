@@ -18,7 +18,7 @@ VECMATHOBJ = $(OBJDIR)ScreenVector.o $(OBJDIR)ScreenPoint.o $(OBJDIR)Vector3.o $
 BRUSHOBJ = $(OBJDIR)MyBrush_UI.o $(OBJDIR)MyBrush.o  $(OBJDIR)BrushInterface.o 
 # This has been updated to add my own shapes code.
 # SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o
-SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o $(OBJDIR)Shape.o $(OBJDIR)Cylinder.o $(OBJDIR)Cube.o $(OBJDIR)Cone.o
+SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o $(OBJDIR)Shape.o $(OBJDIR)Cylinder.o $(OBJDIR)Cube.o $(OBJDIR)Cone.o $(OBJDIR)Sphere.o
 CAMERAOBJ = $(OBJDIR)CameraInterface.o $(OBJDIR)CameraUI.o $(OBJDIR)IBar.o $(OBJDIR)Camera.o
 SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)MyScene_draw.o 
 INTERSECTOBJ  = $(OBJDIR)IntersectionInterface.o $(OBJDIR)IntersectionUI.o
@@ -29,7 +29,7 @@ OBJ = $(MAINOBJ) $(VECMATHOBJ) $(RENDEROBJ)  $(USEROBJ)  $(SCENEOBJ) $(INTERSECT
 
 #LIBS =  -L$(GLDIR) -L$(FLTKLIBDIR) -lfltk -lfltk_gl -lfltk_images -lfltk_forms -lfltk_jpeg -lGLU -lGL -lpng
 LIBS =  -L$(GLDIR) -L$(FLTKLIBDIR) -lfltk -lfltk_gl -lfltk_images -lfltk_forms -lGLU -lGL -lpng
-INCS =  -I$(FLTKINCDIR) -I/usr/X11R6/include -I. -I$(CODEDIR)vecmath -I$(CODEDIR)
+INCS =  -I$(FLTKINCDIR) -I/usr/X11R6/iQnclude -I. -I$(CODEDIR)vecmath -I$(CODEDIR)
 
 BIN = $(OUTDIR)cse452shell
 CXXFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -g

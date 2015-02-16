@@ -13,21 +13,21 @@ Cylinder::Cylinder(int topdiv, int sidediv) : sidediv(sidediv) {
     bot = std::vector<Vector3>();
 
     
-    top.push_back(Vector3(0.0, 1.0, 0.0));
-    bot.push_back(Vector3(0.0, -1.0, 0.0));
+    top.push_back(Vector3(0.0, 0.5, 0.0));
+    bot.push_back(Vector3(0.0, -0.5, 0.0));
     
     for (int i = 0; i < topdiv; i++) {
         double radians = (double)i / (double)topdiv * 2 * 3.14159;
   
-        auto topv = Vector3(sin(radians), 1.0, cos(radians));
-        auto botv = Vector3(sin(radians), -1.0, cos(radians));
+        auto topv = Vector3(0.5 * sin(radians), 0.5, 0.5 * cos(radians));
+        auto botv = Vector3(0.5 * sin(radians), -0.5, 0.5 * cos(radians));
         
         top.push_back(topv);
         bot.push_back(botv);
     }
     
-    top.push_back(Vector3(sin(0), 1.0, cos(0)));
-    bot.push_back(Vector3(sin(0), -1.0, cos(0)));
+    top.push_back(Vector3(0.5 * sin(0), 0.5, 0.5 * cos(0)));
+    bot.push_back(Vector3(0.5 * sin(0), -0.5, 0.5 * cos(0)));
 };
 
 void Cylinder::draw() {
@@ -54,7 +54,7 @@ void Cylinder::draw() {
     glEnd();
     
     // Walls
-    glBegin(GL_QUAD_STRIP);
+    glBegin(GL_TRIANGLE_STRIP);
     double divsize = (double)1 / (double)sidediv;
     for (auto i = 0; i < sidediv; i++) {
         double div = (double)i / (double)sidediv;
