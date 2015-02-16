@@ -9,6 +9,7 @@
 #include "Shape.h"
 #include "Cylinder.h"
 #include "Cube.h"
+#include "Cone.h"
 #include <FL/Fl_Window.H>
 
 class ShapesInterface;

@@ -343,6 +343,8 @@
 		7EA2FD191A915B9E00A947B6 /* Cylinder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cylinder.h; sourceTree = "<group>"; };
 		7EA2FD1A1A91771E00A947B6 /* Cube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cube.cpp; sourceTree = "<group>"; };
 		7EA2FD1B1A91771E00A947B6 /* Cube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cube.h; sourceTree = "<group>"; };
+		7EA2FD1D1A918A9200A947B6 /* Cone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cone.cpp; sourceTree = "<group>"; };
+		7EA2FD1E1A918A9200A947B6 /* Cone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cone.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -836,6 +838,8 @@
 				7EA2FD191A915B9E00A947B6 /* Cylinder.h */,
 				7EA2FD1A1A91771E00A947B6 /* Cube.cpp */,
 				7EA2FD1B1A91771E00A947B6 /* Cube.h */,
+				7EA2FD1D1A918A9200A947B6 /* Cone.cpp */,
+				7EA2FD1E1A918A9200A947B6 /* Cone.h */,
 			);
 			name = ShapeTypes;
 			sourceTree = "<group>";

@@ -110,6 +110,11 @@ void ShapesUI::change() {
     if(cachedShape == shapeMap->second.end()) {
         switch (shapesUI->getShapeType()) {
             default:
+            case SHAPE_CONE:
+                currentShape = new Cone(shapesUI->getTessel1(),
+                                        shapesUI->getTessel2());
+                break;
+                
             case SHAPE_CYLINDER:
                 currentShape = new Cylinder(shapesUI->getTessel1(),
                                             shapesUI->getTessel2());
