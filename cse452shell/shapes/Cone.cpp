@@ -16,7 +16,7 @@ Cone::Cone(int topdiv, int sidediv) {
         double h = -1.0 + 2 * (double)i / (double)sidediv;
         double r = 1.0 - (1.0 + h) / 2.0;
         
-        normals.push_back(1.0 - (double)(i + 1) / (double)sidediv);
+        normals.push_back((double)(i + 1) / (double)sidediv);
         
         for (int j = 0; j < topdiv; j++) {
             double radians = (double)j / (double)topdiv * 2 * 3.14159;
@@ -31,7 +31,7 @@ Cone::Cone(int topdiv, int sidediv) {
 
 void Cone::draw() {
     glBegin(GL_TRIANGLES);
-    auto v = pts[0];
+    auto v = pts[pts.size() - 1];
     for (size_t i = 0; i < v.size(); i++) {
         Vector3 pt1;
         Vector3 pt2;
@@ -45,18 +45,18 @@ void Cone::draw() {
         
         glNormal3f(0, 1, 0);
         glVertex3f(0.0, 1.0, 0.0);
-        glNormal3d(pt1[0], normals[0], pt1[2]);
+        glNormal3d(pt1[0], normals[normals.size() - 1], pt1[2]);
         glVertex3f(pt1[0], pt1[1], pt1[2]);
-        glNormal3d(pt2[0], normals[0], pt2[2]);
+        glNormal3d(pt2[0], normals[normals.size() - 1], pt2[2]);
         glVertex3f(pt2[0], pt2[1], pt2[2]);
     }
     glEnd();
     
-    for (size_t i = 0; i <= 0; i++) {
-        glBegin(GL_QUAD_STRIP);
+    for (size_t i = 0; i <= pts.size() - 2; i++) {
+        glBegin(GL_TRIANGLE_STRIP);
             for (size_t j = 0; j < pts[i].size(); j++) {
                 auto pt1 = pts[i][j];
-                auto pt2 = pts[pts.size() - 1][j];
+                auto pt2 = pts[i + 1][j];
                 
                 glNormal3d(pt2[0], normals[i + 1], pt2[2]);
                 glVertex3d(pt2[0], pt2[1], pt2[2]);
@@ -72,8 +72,8 @@ void Cone::draw() {
         glNormal3d(pt1[0], normals[i], pt1[2]);
         glVertex3d(pt1[0], pt1[1], pt1[2]);
         
-        GLfloat n[3];
-        glGetFloatv(GL_CURRENT_NORMAL, n);
+//        GLfloat n[3];
+//        glGetFloatv(GL_CURRENT_NORMAL, n);
         
         glEnd();
     }

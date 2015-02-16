@@ -9,7 +9,7 @@ Vector3::Vector3() : x(0), y(0), z(0)
 {
 }
 
-Vectxor3::Vector3(const Vector3& v) : x(v[0]), y(v[1]), z(v[2])
+Vector3::Vector3(const Vector3& v) : x(v[0]), y(v[1]), z(v[2])
 {
 }
 
