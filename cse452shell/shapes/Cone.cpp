@@ -13,8 +13,8 @@ Cone::Cone(int topdiv, int sidediv) {
     normals = std::vector<double>();
 
     for (int i = 0; i < sidediv; i++) {
-        double h = -1.0 + (double)i / (double)sidediv;
-        double r = 1.0 - (1.0 + h) / 2.0;
+        double h = -0.5 + (double)i / (double)sidediv;
+        double r = 0.5 - (0.5 + h) / 2.0;
         
         normals.push_back((double)(i + 1) / (double)sidediv);
         
@@ -44,7 +44,7 @@ void Cone::draw() {
         }
         
         glNormal3f(0, 1, 0);
-        glVertex3f(0.0, 1.0, 0.0);
+        glVertex3f(0.0, 0.5, 0.0);
         glNormal3d(pt1[0], normals[normals.size() - 1], pt1[2]);
         glVertex3f(pt1[0], pt1[1], pt1[2]);
         glNormal3d(pt2[0], normals[normals.size() - 1], pt2[2]);
@@ -81,7 +81,7 @@ void Cone::draw() {
     // Bottom circle
     glBegin(GL_TRIANGLE_FAN);
     glNormal3d(0.0, -1.0, 0.0);
-    glVertex3d(0.0, -1.0, 0.0);
+    glVertex3d(0.0, -0.5, 0.0);
     
     v = pts[0];
     for(auto i = v.size() - 1; i < v.size(); i--) {

@@ -101,6 +101,15 @@ void ShapesUI::change(ShapeType type, int tessel1, int tessel2) {
     if(cachedShape == nullptr) {
         switch (type) {
             default:
+            case SHAPE_SPHERE: {
+                // Minimum values
+                auto ct1 = (tessel1 >= 3) ? tessel1 : 3;
+                auto ct2 = (tessel2 >= 1) ? tessel2 : 1;
+                ct2 = (ct2 <= 7) ? ct2 : 7;
+                currentShape = new Sphere(ct1, ct2);
+                break;
+            }
+                
             case SHAPE_CONE: {
                 // Minimum values
                 auto ct1 = (tessel1 >= 3) ? tessel1 : 3;

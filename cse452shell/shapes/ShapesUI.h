@@ -7,6 +7,7 @@
 #include "../UIInterface.h"
 #include "../cse452.h"
 #include "Shape.h"
+#include "Sphere.h"
 #include "Cylinder.h"
 #include "Cube.h"
 #include "Cone.h"
