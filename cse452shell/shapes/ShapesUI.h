@@ -1,8 +1,12 @@
 #ifndef _SHAPES_UI_H_
 #define _SHAPES_UI_H_
 
+#include <unordered_map>
+#include <utility>
+
 #include "../UIInterface.h"
 #include "../cse452.h"
+#include "Shape.h"
 #include <FL/Fl_Window.H>
 
 class ShapesInterface;
@@ -36,10 +40,25 @@ public:
     void setUI( const ShapesInterface *in_ui ) { shapesUI = in_ui; }
 
 private:
+    void change();
+    
     int width, height;
     const ShapesInterface *shapesUI;
-
+    
     // declare your variables here
+    
+    // http://stackoverflow.com/questions/20590656/error-for-hash-function-of-pair-of-ints
+    struct pairhash {
+    public:
+        template <typename T, typename U>
+        std::size_t operator()(const std::pair<T, U> &x) const
+        {
+            return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
+        }
+    };
+    
+    Shape *currentShape;
+    std::unordered_map<int, std::unordered_map<std::pair<int, int>, Shape*, pairhash> > shapes;
 };
 
 #endif /* _SHAPES_UI_H_ */

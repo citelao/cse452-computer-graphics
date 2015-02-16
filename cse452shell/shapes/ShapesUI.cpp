@@ -11,10 +11,18 @@
 #include <GL/glu.h>
 #endif
 
+#include "Cylinder.h"
+
 ShapesUI::ShapesUI() {
     width = height = 0;
 
-    // ToDo: initialize your variables here
+    currentShape = nullptr;
+    shapes = {
+        {SHAPE_SPHERE, {}},
+        {SHAPE_CONE, {}},
+        {SHAPE_CYLINDER, {}},
+        {SHAPE_CUBE, {}}
+    };
 }
 
 ShapesUI::~ShapesUI() {
@@ -59,7 +67,23 @@ void ShapesUI::draw() {
 
     // ToDo: draw your shape here
     // DO NOT put the actual draw OpenGL code here - put it in the shape class and call the draw method
-
+    
+//    OK, this isn't hard
+    glBegin(GL_LINES);
+    glVertex3f(0.0, 1.0, 0.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    
+    glVertex3f(0.0, 0.0, 1.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    
+    glVertex3f(1.0, 0.0, 0.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    glEnd();
+    
+    if (currentShape != nullptr) {
+        currentShape->draw();
+    }
+    
     endDrawing();
 }
 
@@ -67,18 +91,43 @@ int ShapesUI::handle(int event) {
     return 0;
 }
 
-void ShapesUI::changedShape()
-{
-    // ToDo: Switch shapes
-
+void ShapesUI::change() {
+    auto shapeMap = shapes.find(shapesUI->getShapeType());
+    
+    if (shapeMap == shapes.end()) {
+        // Could not find this type of shape.
+        // This is an error
+        throw(new std::invalid_argument("We can't draw this shape"));
+    }
+    
+    auto keyPair = std::make_pair(shapesUI->getTessel1(), shapesUI->getTessel2());
+    auto cachedShape = shapeMap->second.find(keyPair);
+    
+    // If we have not cached this shape yet, create one and store it.
+    // Otherwise use the cache.
+    if(cachedShape == shapeMap->second.end()) {
+        currentShape = new Cylinder(shapesUI->getTessel1(),
+                                    shapesUI->getTessel2());
+        
+        std::pair<std::pair<int, int>, Shape*> shapePair = {
+            keyPair,
+            currentShape
+        };
+        shapeMap->second.insert(shapePair);
+        
+    } else {
+        currentShape = cachedShape->second;
+    }
     
     RedrawWindow();
 }
 
-void ShapesUI::changedTessel( ) {
-    // ToDo: tessellate your shape here
+void ShapesUI::changedShape()
+{
+    change();
+}
 
-    
-    RedrawWindow();
+void ShapesUI::changedTessel( ) {
+    change();
 }
 

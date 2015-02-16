@@ -16,7 +16,9 @@ OUTDIR = build/
 MAINOBJ = $(OBJDIR)main.o $(OBJDIR)GLWindow.o $(OBJDIR)ShellInterface.o $(OBJDIR)UIInterface.o
 VECMATHOBJ = $(OBJDIR)ScreenVector.o $(OBJDIR)ScreenPoint.o $(OBJDIR)Vector3.o $(OBJDIR)Point3.o $(OBJDIR)Matrix3.o $(OBJDIR)Vector4.o $(OBJDIR)Matrix4.o
 BRUSHOBJ = $(OBJDIR)MyBrush_UI.o $(OBJDIR)MyBrush.o  $(OBJDIR)BrushInterface.o 
-SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o
+# This has been updated to add my own shapes code.
+# SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o
+SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o $(OBJDIR)Shape.o $(OBJDIR)Cylinder.o
 CAMERAOBJ = $(OBJDIR)CameraInterface.o $(OBJDIR)CameraUI.o $(OBJDIR)IBar.o $(OBJDIR)Camera.o
 SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)MyScene_draw.o 
 INTERSECTOBJ  = $(OBJDIR)IntersectionInterface.o $(OBJDIR)IntersectionUI.o
@@ -30,8 +32,8 @@ LIBS =  -L$(GLDIR) -L$(FLTKLIBDIR) -lfltk -lfltk_gl -lfltk_images -lfltk_forms -
 INCS =  -I$(FLTKINCDIR) -I/usr/X11R6/include -I. -I$(CODEDIR)vecmath -I$(CODEDIR)
 
 BIN = $(OUTDIR)cse452shell
-CXXFLAGS = $(INCS) -DLINUX -Wextra -std=c++98 -g
-LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++98 -framework Carbon -framework AGL -g
+CXXFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -g
+LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -framework Carbon -framework AGL -g
 
 .PHONY: all all-before all-after clean clean-custom
 
@@ -46,13 +48,13 @@ $(BIN): $(OBJ)
 $(MAINOBJ): $(OBJDIR)%.o: $(CODEDIR)%.cpp $(CODEDIR)cse452.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(VECMATHOBJ): $(OBJDIR)%.o: $(CODEDIR)vecmath/%.cpp 
+$(VECMATHOBJ): $(OBJDIR)%.o: $(CODEDIR)vecmath/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 $(BRUSHOBJ): $(OBJDIR)%.o: $(CODEDIR)brush/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(SHAPESOBJ): $(OBJDIR)%.o: $(CODEDIR)shapes/%.cpp
+$(SHAPESOBJ): $(OBJDIR)%.o: $(CODEDIR)shapes/%.cpp $(CODEDIR)shapes/%.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 $(CAMERAOBJ): $(OBJDIR)%.o: $(CODEDIR)camera/%.cpp

@@ -337,6 +337,10 @@
 		7E4C03991A74272400AFF63E /* Vector3.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Vector3.o; sourceTree = "<group>"; };
 		7E4C039A1A74272400AFF63E /* Vector4.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Vector4.o; sourceTree = "<group>"; };
 		7E4C039B1A74272400AFF63E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		7E865FBF1A9123FB0041BD65 /* Shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shape.cpp; sourceTree = "<group>"; };
+		7E865FC01A9123FB0041BD65 /* Shape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shape.h; sourceTree = "<group>"; };
+		7EA2FD181A915B9E00A947B6 /* Cylinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cylinder.cpp; sourceTree = "<group>"; };
+		7EA2FD191A915B9E00A947B6 /* Cylinder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cylinder.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -496,6 +500,9 @@
 				7E4C028C1A74272300AFF63E /* ShapesInterface.h */,
 				7E4C028D1A74272300AFF63E /* ShapesUI.cpp */,
 				7E4C028E1A74272300AFF63E /* ShapesUI.h */,
+				7E865FBF1A9123FB0041BD65 /* Shape.cpp */,
+				7E865FC01A9123FB0041BD65 /* Shape.h */,
+				7E9D1E9D1A9130510018DB7B /* ShapeTypes */,
 			);
 			path = shapes;
 			sourceTree = "<group>";
@@ -818,6 +825,15 @@
 				7E4C039A1A74272400AFF63E /* Vector4.o */,
 			);
 			path = objs;
+			sourceTree = "<group>";
+		};
+		7E9D1E9D1A9130510018DB7B /* ShapeTypes */ = {
+			isa = PBXGroup;
+			children = (
+				7EA2FD181A915B9E00A947B6 /* Cylinder.cpp */,
+				7EA2FD191A915B9E00A947B6 /* Cylinder.h */,
+			);
+			name = ShapeTypes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
