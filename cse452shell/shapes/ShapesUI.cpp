@@ -84,20 +84,26 @@ int ShapesUI::handle(int event) {
     return 0;
 }
 
-void ShapesUI::change(ShapeType type, int tessel1, int tessel2) {
+Shape* ShapesUI::change(ShapeType type, int tessel1, int tessel2) {
     auto cachedShape = getCached(type, tessel1, tessel2);
     
     // If we have not cached this shape yet, create one and store it.
     // Otherwise use the cache.
     if(cachedShape == nullptr) {
+        Shape* ret;
+        
         switch (type) {
             default:
             case SHAPE_SPHERE: {
                 // Minimum values
-                auto ct1 = (tessel1 >= 3) ? tessel1 : 3;
+                auto ct1 = 1;
                 auto ct2 = (tessel2 >= 1) ? tessel2 : 1;
                 ct2 = (ct2 <= 7) ? ct2 : 7;
-                currentShape = new Sphere(ct1, ct2);
+                if (ct1 != tessel1 || ct2 != tessel2) {
+                    return change(SHAPE_SPHERE, ct1, ct2);
+                }
+                
+                ret = new Sphere(ct1, ct2);
                 break;
             }
                 
@@ -105,31 +111,42 @@ void ShapesUI::change(ShapeType type, int tessel1, int tessel2) {
                 // Minimum values
                 auto ct1 = (tessel1 >= 3) ? tessel1 : 3;
                 auto ct2 = (tessel2 >= 2) ? tessel2 : 2;
-                currentShape = new Cone(ct1, ct2);
+                if (ct1 != tessel1 || ct2 != tessel2) {
+                    return change(SHAPE_CONE, ct1, ct2);
+                }
+                
+                ret = new Cone(ct1, ct2);
                 break;
             }
                 
             case SHAPE_CYLINDER: {
                 auto ct1 = (tessel1 >= 3) ? tessel1 : 3;
                 auto ct2 = (tessel2 >= 1) ? tessel2 : 1;
-                currentShape = new Cylinder(ct1, ct2);
+                if (ct1 != tessel1 || ct2 != tessel2) {
+                    return change(SHAPE_CYLINDER, ct1, ct2);
+                }
+                
+                ret = new Cylinder(ct1, ct2);
                 break;
             }
                 
             case SHAPE_CUBE: {
                 auto ct1 = (tessel1 >= 1) ? tessel1 : 1;
                 auto ct2 = (tessel2 >= 1) ? tessel2 : 1;
-                currentShape = new Cube(ct1, ct2);
+                if (ct1 != tessel1 || ct2 != tessel2) {
+                    return change(SHAPE_CUBE, ct1, ct2);
+                }
+                
+                ret = new Cube(ct1, ct2);
                 break;
             }
         }
         
-        cache(currentShape, type, tessel1, tessel2);
-    } else {
-        currentShape = cachedShape;
+        cache(ret, type, tessel1, tessel2);
+        return ret;
     }
     
-    RedrawWindow();
+    return cachedShape;
 }
 
 Shape* ShapesUI::getCached(ShapeType type, int tessel1, int tessel2) {
@@ -169,14 +186,18 @@ void ShapesUI::cache(Shape* shape, ShapeType type, int tessel1, int tessel2) {
 
 void ShapesUI::changedShape()
 {
-    change(shapesUI->getShapeType(),
+    currentShape = change(shapesUI->getShapeType(),
            shapesUI->getTessel1(),
            shapesUI->getTessel2());
+    
+    RedrawWindow();
 }
 
 void ShapesUI::changedTessel() {
-    change(shapesUI->getShapeType(),
+    currentShape = change(shapesUI->getShapeType(),
            shapesUI->getTessel1(),
            shapesUI->getTessel2());
+
+    RedrawWindow();
 }
 

@@ -11,7 +11,7 @@
 Sphere::Sphere(int topdiv, int sidediv) {
     // Geodesic model!
     // start with three points, subdivide however many times.
-    trueradius = 1.0;
+    trueradius = 0.5;
     
     const double radius = 1;
     const double gr = (1.0 + sqrt(5)) / 2.0;
