@@ -15,7 +15,6 @@ ShapesUI::ShapesUI() {
     width = height = 0;
 
     currentShape = nullptr;
-    shapes = {};
 }
 
 ShapesUI::~ShapesUI() {
