@@ -132,7 +132,8 @@ Shape* ShapesUI::change(ShapeType type, int tessel1, int tessel2) {
                 
             case SHAPE_CUBE: {
                 auto ct1 = (tessel1 >= 1) ? tessel1 : 1;
-                auto ct2 = (tessel2 >= 1) ? tessel2 : 1;
+                ct1 = (tessel1 <= 7) ? tessel1 : 7;
+                auto ct2 = 1;
                 if (ct1 != tessel1 || ct2 != tessel2) {
                     return change(SHAPE_CUBE, ct1, ct2);
                 }

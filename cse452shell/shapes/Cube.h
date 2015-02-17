@@ -29,7 +29,11 @@ public:
     void draw();
     
 private:
+    void subdivide(Vector3 tl, Vector3 tr, Vector3 bl, Vector3 br, Vector3 norm, int depth);
+    
+    std::vector<Vector3> basis;
     std::vector<Vector3> pts;
+    std::vector<Vector3> normals;
     std::vector<int> indeces;
     
     int topdiv;

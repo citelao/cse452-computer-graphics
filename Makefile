@@ -32,8 +32,8 @@ LIBS =  -L$(GLDIR) -L$(FLTKLIBDIR) -lfltk -lfltk_gl -lfltk_images -lfltk_forms -
 INCS =  -I$(FLTKINCDIR) -I/usr/X11R6/iQnclude -I. -I$(CODEDIR)vecmath -I$(CODEDIR)
 
 BIN = $(OUTDIR)cse452shell
-CXXFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -g
-LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -framework Carbon -framework AGL -g
+CXXFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -g -O0
+LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -framework Carbon -framework AGL -g 
 
 .PHONY: all all-before all-after clean clean-custom
 
