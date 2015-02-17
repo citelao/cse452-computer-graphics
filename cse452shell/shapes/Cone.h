@@ -30,7 +30,6 @@ public:
     
 private:
     std::vector<std::vector<Vector3> > pts;
-    std::vector<double> normals;
     
     int sidediv;
 };

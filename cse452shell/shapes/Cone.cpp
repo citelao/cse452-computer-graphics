@@ -10,13 +10,10 @@
 
 Cone::Cone(int topdiv, int sidediv) {
     pts = std::vector<std::vector<Vector3> >(sidediv);
-    normals = std::vector<double>();
 
     for (int i = 0; i < sidediv; i++) {
         double h = -0.5 + (double)i / (double)sidediv;
         double r = 0.5 - (0.5 + h) / 2.0;
-        
-        normals.push_back((double)(i + 1) / (double)sidediv);
         
         for (int j = 0; j < topdiv; j++) {
             double radians = (double)j / (double)topdiv * 2 * 3.14159;
@@ -45,9 +42,9 @@ void Cone::draw() {
         
         glNormal3f(0, 1, 0);
         glVertex3f(0.0, 0.5, 0.0);
-        glNormal3d(pt1[0], normals[normals.size() - 1], pt1[2]);
+        glNormal3d(pt1[0], 0, pt1[2]);
         glVertex3f(pt1[0], pt1[1], pt1[2]);
-        glNormal3d(pt2[0], normals[normals.size() - 1], pt2[2]);
+        glNormal3d(pt2[0], 0, pt2[2]);
         glVertex3f(pt2[0], pt2[1], pt2[2]);
     }
     glEnd();
@@ -58,18 +55,18 @@ void Cone::draw() {
                 auto pt1 = pts[i][j];
                 auto pt2 = pts[i + 1][j];
                 
-                glNormal3d(pt2[0], normals[i + 1], pt2[2]);
+                glNormal3d(pt2[0], 0, pt2[2]);
                 glVertex3d(pt2[0], pt2[1], pt2[2]);
-                glNormal3d(pt1[0], normals[i], pt1[2]);
+                glNormal3d(pt1[0], 0, pt1[2]);
                 glVertex3d(pt1[0], pt1[1], pt1[2]);
             }
         
         auto pt1 = pts[i][0];
         auto pt2 = pts[i + 1][0];
         
-        glNormal3d(pt2[0], normals[i + 1], pt2[2]);
+        glNormal3d(pt2[0], 0, pt2[2]);
         glVertex3d(pt2[0], pt2[1], pt2[2]);
-        glNormal3d(pt1[0], normals[i], pt1[2]);
+        glNormal3d(pt1[0], 0, pt1[2]);
         glVertex3d(pt1[0], pt1[1], pt1[2]);
         
 //        GLfloat n[3];
