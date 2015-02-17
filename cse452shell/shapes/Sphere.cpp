@@ -11,15 +11,13 @@
 Sphere::Sphere(int topdiv, int sidediv) {
     // Geodesic model!
     // start with three points, subdivide however many times.
-    const auto radius = 0.5;
-    const std::vector<double> angles = {0, 2 * 3.14159 / 3, 2 * 2 * 3.14159 / 3};
+    const double radius = 1.0;
     const double gr = (1.0 + sqrt(5)) / 2.0;
     
     // (0, ±1, ±φ)
     // (±1, ±φ, 0)
     // (±φ, 0, ±1)
-    
-    const std::vector<Vector3> basis = {
+    std::vector<Vector3> basis = {
         Vector3(0, radius, radius * gr),   // 0
         Vector3(0, radius, -radius * gr),  // 1
         Vector3(0, -radius, radius * gr),  // 2
@@ -36,8 +34,13 @@ Sphere::Sphere(int topdiv, int sidediv) {
         Vector3(-radius * gr, 0, -radius)  // 11
     };
     
-//    auto depth = sidediv;
-    auto depth = 1;
+//    for (auto pt : basis) {
+//        pt.normalize();
+//        
+//        pt = pt / 2.0;
+//    }
+    
+    auto depth = sidediv;
     
     // front
     
@@ -94,6 +97,10 @@ void Sphere::subdiv(Vector3 a, Vector3 b, Vector3 c, int d) {
     abprime.normalize();
     bcprime.normalize();
     acprime.normalize();
+//    
+//    abprime = abprime / 2;
+//    bcprime = bcprime / 2;
+//    acprime = acprime / 2;
     
     subdiv(abprime, bcprime, acprime, d - 1);
     subdiv(bcprime, abprime, b, d - 1);
