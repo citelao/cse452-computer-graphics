@@ -11,7 +11,9 @@
 Sphere::Sphere(int topdiv, int sidediv) {
     // Geodesic model!
     // start with three points, subdivide however many times.
-    const double radius = 1.0;
+    trueradius = 1.0;
+    
+    const double radius = 1;
     const double gr = (1.0 + sqrt(5)) / 2.0;
     
     // (0, ±1, ±φ)
@@ -34,11 +36,11 @@ Sphere::Sphere(int topdiv, int sidediv) {
         Vector3(-radius * gr, 0, -radius)  // 11
     };
     
-//    for (auto pt : basis) {
-//        pt.normalize();
-//        
-//        pt = pt / 2.0;
-//    }
+    for (auto &pt : basis) {
+        pt.normalize();
+        
+        pt = pt * trueradius;
+    }
     
     auto depth = sidediv;
     
@@ -97,10 +99,10 @@ void Sphere::subdiv(Vector3 a, Vector3 b, Vector3 c, int d) {
     abprime.normalize();
     bcprime.normalize();
     acprime.normalize();
-//    
-//    abprime = abprime / 2;
-//    bcprime = bcprime / 2;
-//    acprime = acprime / 2;
+
+    abprime = abprime * trueradius;
+    bcprime = bcprime * trueradius;
+    acprime = acprime * trueradius;
     
     subdiv(abprime, bcprime, acprime, d - 1);
     subdiv(bcprime, abprime, b, d - 1);

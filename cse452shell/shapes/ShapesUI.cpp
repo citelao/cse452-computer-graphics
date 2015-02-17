@@ -15,12 +15,7 @@ ShapesUI::ShapesUI() {
     width = height = 0;
 
     currentShape = nullptr;
-    shapes = {
-        {SHAPE_SPHERE, {}},
-        {SHAPE_CONE, {}},
-        {SHAPE_CYLINDER, {}},
-        {SHAPE_CUBE, {}}
-    };
+    shapes = {};
 }
 
 ShapesUI::~ShapesUI() {
@@ -63,24 +58,21 @@ void ShapesUI::draw() {
                3.5 * sin( shapesUI->getYRot() ), 
                3.5 * cos( shapesUI->getYRot() ) * sin( shapesUI->getXRot() ), 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-    // ToDo: draw your shape here
-    // DO NOT put the actual draw OpenGL code here - put it in the shape class and call the draw method
-    
     // OK, this isn't hard
     // Draw some axes
-    glBegin(GL_LINES);
-    glVertex3f(0.0, 1.0, 0.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    
-    glVertex3f(0.0, 0.0, 1.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    
-    glVertex3f(1.0, 0.0, 0.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(1.0, 1.0, 1.0);
-    glEnd();
+//    glBegin(GL_LINES);
+//    glVertex3f(0.0, 1.0, 0.0);
+//    glVertex3f(0.0, 0.0, 0.0);
+//    
+//    glVertex3f(0.0, 0.0, 1.0);
+//    glVertex3f(0.0, 0.0, 0.0);
+//    
+//    glVertex3f(1.0, 0.0, 0.0);
+//    glVertex3f(0.0, 0.0, 0.0);
+//    
+//    glVertex3f(0.0, 0.0, 0.0);
+//    glVertex3f(1.0, 1.0, 1.0);
+//    glEnd();
     
     if (currentShape != nullptr) {
         currentShape->draw();
@@ -142,49 +134,38 @@ void ShapesUI::change(ShapeType type, int tessel1, int tessel2) {
 }
 
 Shape* ShapesUI::getCached(ShapeType type, int tessel1, int tessel2) {
-    auto shapeMap = shapes.find(type);
+    std::stringstream keystm;
+    keystm << "a " << type << " " << tessel1 << " " << tessel2;
+    auto key = keystm.str();
+    auto cachedShape = shapes.find(key);
     
-    if (shapeMap == shapes.end()) {
-        // Could not find this type of shape.
-        // This is an error
-        throw(new std::invalid_argument("We can't draw this shape"));
-    }
-    
-    auto keyPair = std::make_pair(tessel1, tessel2);
-    auto cachedShape = shapeMap->second.find(keyPair);
-    
-    if (cachedShape == shapeMap->second.end()) {
-//        std::cout << "No cached shape for " <<
-//            type << " (" << tessel1 << ", " <<
-//            tessel2 << ")" << std::endl;
+    if (cachedShape == shapes.end()) {
+        std::cout << "No cached shape for " <<
+            type << " (" << tessel1 << ", " <<
+            tessel2 << ")" << std::endl;
         
         return nullptr;
     }
     
     
-//    std::cout << "Found cached shape for " <<
-//    type << " (" << tessel1 << ", " <<
-//    tessel2 << ")" << std::endl;
+    std::cout << "Found cached shape for " <<
+    type << " (" << tessel1 << ", " <<
+    tessel2 << ")" << std::endl;
     
     return cachedShape->second;
     
 }
 
 void ShapesUI::cache(Shape* shape, ShapeType type, int tessel1, int tessel2) {
-    auto shapeMap = shapes.find(type);
+    std::stringstream keystm;
+    keystm << "a " << type << " " << tessel1 << " " << tessel2;
+    auto key = keystm.str();
     
-    if (shapeMap == shapes.end()) {
-        // Could not find this type of shape.
-        // This is an error
-        throw(new std::invalid_argument("We can't draw this shape"));
-    }
-
-    auto keyPair = std::make_pair(tessel1, tessel2);
-    std::pair<std::pair<int, int>, Shape*> shapePair = {
-        keyPair,
+    std::pair<std::string, Shape*> pair = {
+        key,
         shape
     };
-    shapeMap->second.insert(shapePair);
+    shapes.insert(pair);
 }
 
 void ShapesUI::changedShape()

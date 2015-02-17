@@ -31,6 +31,7 @@ private:
     void subdiv(Vector3 a, Vector3 b, Vector3 c, int d);
     
     std::vector<Vector3> pts;
+    double trueradius;
 };
 
 #endif /* defined(__cse452shellXC__Sphere__) */
