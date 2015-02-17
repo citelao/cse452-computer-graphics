@@ -27,6 +27,11 @@ inline bool isZero(double in_d, double in_dEps = IZ_EPSILON)
     return (in_d < in_dEps && in_d > -in_dEps) ? true : false; 
 }
 
+
+#if defined(_WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(_WIN64)
+#include <windows.h>
+#endif
+
 #include <cassert>
 #include <cmath>
 #include <iostream>

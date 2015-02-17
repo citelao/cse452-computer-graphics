@@ -13,6 +13,7 @@
 // because Apple is stupid and I hate everyone
 #include <OpenGL/glu.h>
 #else
+#include <Windows.h>
 #include <GL/glu.h>
 #endif
 
