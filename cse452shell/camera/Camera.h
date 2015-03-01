@@ -1,7 +1,8 @@
 #ifndef _MY_CAMERA_H_
 #define _MY_CAMERA_H_
 
-#include <set>
+#include <vector>
+#include <algorithm>
 
 #include "cse452.h"
 #include "Matrix4.h"
@@ -97,7 +98,7 @@ private:
     double _near;
     double _far;
     
-    void initialize(std::set<std::string> changed = std::set<std::string>());
+    void initialize(std::vector<std::string> changed = std::vector<std::string>());
     
     Vector3 _u;
     Vector3 _v;
@@ -116,7 +117,6 @@ private:
     Matrix4 _proj;
     Matrix4 _wtc;
     Matrix4 _ctw;
-    
 };
 
 #endif /* _MY_CAMERA_H_ */

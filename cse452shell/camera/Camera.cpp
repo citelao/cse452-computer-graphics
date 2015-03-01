@@ -3,7 +3,7 @@
 #include <cmath>
 #include <FL/Fl.H>
 
-void Camera::initialize(std::set<std::string> changed) {
+void Camera::initialize(std::vector<std::string> changed) {
     if(changed.size() == 0) {
         // Assume all changed
         changed = {
@@ -21,27 +21,30 @@ void Camera::initialize(std::set<std::string> changed) {
         };
     }
     
-    if (changed.find("_look") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_look") != changed.end()) {
         _n = -_look.unit();
-        changed.insert("_n");
+        changed.push_back("_n");
     }
     
-    if (changed.find("_up") != changed.end() || changed.find("_n") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_up") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_n") != changed.end()) {
         _v = (_up - (_up * _n) * _n).unit();
         
         _u = (_v ^ _n).unit();
         
-        changed.insert("_v");
-        changed.insert("_u");
+        changed.push_back("_v");
+        changed.push_back("_u");
     }
 
-    if (changed.find("_width") != changed.end() || changed.find("_height") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_width") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_height") != changed.end()) {
+        
         _aspect = (double)_width / (double)_height;
         
-        changed.insert("_aspect");
+        changed.push_back("_aspect");
     }
     
-    if (changed.find("_from") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_from") != changed.end()) {
         _t = Matrix4(Vector4(1, 0, 0, -_from[0]),
                      Vector4(0, 1, 0, -_from[1]),
                      Vector4(0, 0, 1, -_from[2]),
@@ -54,13 +57,13 @@ void Camera::initialize(std::set<std::string> changed) {
         
         assert(Matrix4::identity().approxEqual(_t * _tinv));
         
-        changed.insert("_t");
-        changed.insert("_tinv");
+        changed.push_back("_t");
+        changed.push_back("_tinv");
     }
     
-    if (changed.find("_u") != changed.end() ||
-        changed.find("_v") != changed.end() ||
-        changed.find("_n") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_u") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_v") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_n") != changed.end()) {
         _r = Matrix4(Vector4(_u[0], _u[1], _u[2], 0),
                      Vector4(_v[0], _v[1], _v[2], 0),
                      Vector4(_n[0], _n[1], _n[2], 0),
@@ -73,12 +76,12 @@ void Camera::initialize(std::set<std::string> changed) {
         
         assert(Matrix4::identity().approxEqual(_r * _rinv));
         
-        changed.insert("_r");
-        changed.insert("_rinv");
+        changed.push_back("_r");
+        changed.push_back("_rinv");
     }
     
-    if (changed.find("_fov") != changed.end() ||
-        changed.find("_aspect") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_fov") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_aspect") != changed.end()) {
         double thetaw = _fov;
         double thetah = _fov / _aspect;
         
@@ -94,11 +97,11 @@ void Camera::initialize(std::set<std::string> changed) {
         
         assert(Matrix4::identity().approxEqual(_sxy * _sxyinv));
         
-        changed.insert("_sxy");
-        changed.insert("_sxyinv");
+        changed.push_back("_sxy");
+        changed.push_back("_sxyinv");
     }
     
-    if (changed.find("_far") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_far") != changed.end()) {
         _sxyz = Matrix4(Vector4(1 / _far, 0, 0, 0),
                         Vector4(0, 1 / _far, 0, 0),
                         Vector4(0, 0, 1 / _far, 0),
@@ -111,29 +114,29 @@ void Camera::initialize(std::set<std::string> changed) {
         
         assert(Matrix4::identity().approxEqual(_sxyz * _sxyzinv));
         
-        changed.insert("_sxyz");
-        changed.insert("_sxyzinv");
+        changed.push_back("_sxyz");
+        changed.push_back("_sxyzinv");
     }
     
-    if (changed.find("_sxyz") != changed.end() ||
-        changed.find("_sxy") != changed.end() ||
-        changed.find("_r") != changed.end() ||
-        changed.find("_t") != changed.end() ||
-        changed.find("_sxyzinv") != changed.end() ||
-        changed.find("_sxyinv") != changed.end() ||
-        changed.find("_rinv") != changed.end() ||
-        changed.find("_tinv") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_sxyz") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_sxy") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_r") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_t") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_sxyzinv") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_sxyinv") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_rinv") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_tinv") != changed.end()) {
         
         _wtc = _sxyz * _sxy * _r * _t;
         _ctw = _tinv * _rinv * _sxyinv * _sxyzinv;
         
         assert(Matrix4::identity().approxEqual(_wtc * _ctw));
         
-        changed.insert("_wtc");
+        changed.push_back("_wtc");
     }
     
-    if (changed.find("_near") != changed.end() ||
-        changed.find("_far") != changed.end()) {
+    if (std::find(changed.begin(), changed.end(), "_near") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_far") != changed.end()) {
         double k = _near / _far;
         
         _proj = Matrix4(Vector4(1, 0, 0, 0),
@@ -141,7 +144,7 @@ void Camera::initialize(std::set<std::string> changed) {
                         Vector4(0, 0, 1 / (k - 1), k / (k - 1)),
                         Vector4(0, 0, -1, 0));
         
-        changed.insert("_proj");
+        changed.push_back("_proj");
     }
 }
 
