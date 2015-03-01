@@ -9,7 +9,7 @@
 class Camera {
 public:
     Camera()
-    : Camera(Point3(0, 0, 0), Point3(0, 0, 1), Vector3(0, 1, 0), 90, 0.1, 30, 640, 480) {};
+    : Camera(Point3(0, 0, 0), Point3(0, 0, 1), Vector3(0, 1, 0), 3.1415/2, 0.1, 30, 640, 480) {};
     Camera(Point3 from, Point3 at, Vector3 up, double fov, double near, double far, int width, int height)
     : _from(from), _look(at - from), _up(up), _fov(fov), _near(near), _far(far), _width(width), _height(height) {
         initialize();
@@ -104,6 +104,8 @@ private:
     Matrix4 _proj;
     Matrix4 _wtc;
     Matrix4 _ctw;
+    Matrix4 _r;
+    Matrix4 _rinv;
     
 };
 

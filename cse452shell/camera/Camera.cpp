@@ -10,30 +10,28 @@ void Camera::initialize() {
     
     _aspect = (double)_width / (double)_height;
     
-    double thetaw = _fov / 180 * 3.1415;
-    double thetah = _fov / 180 * 3.1415 / _aspect;
-    
-    double df = _far;
+    double thetaw = _fov;
+    double thetah = _fov / _aspect;
     
     double k = _near / _far;
     
     _wtc = Matrix4(
-        Vector4(_u[0] / tan(thetaw/2) / df,
-                _u[1] / tan(thetaw/2) / df,
-                _u[2] / tan(thetaw/2) / df,
-                - _from[0] * _u[0] / tan(thetaw / 2) / df
-                - _from[1] * _u[1] / tan(thetaw / 2) / df
-                - _from[2] * _u[2] / tan(thetaw / 2) / df),
-        Vector4(_v[0] / tan(thetah/2) / df,
-              _v[1] / tan(thetah/2) / df,
-              _v[2] / tan(thetah/2) / df,
-              - _from[0] * _v[0] / tan(thetah / 2) / df
-              - _from[1] * _v[1] / tan(thetah / 2) / df
-              - _from[2] * _v[2] / tan(thetah / 2) / df),
-        Vector4(_n[0] / df,
-                _n[1] / df,
-                _n[2] / df,
-                - (_n[0] * _from[0]) / df - (_n[1] * _from[1]) / df - (_n[2] * _from[2]) / df),
+        Vector4(_u[0] / tan(thetaw/2) / _far,
+                _u[1] / tan(thetaw/2) / _far,
+                _u[2] / tan(thetaw/2) / _far,
+                - _from[0] * _u[0] / tan(thetaw / 2) / _far
+                - _from[1] * _u[1] / tan(thetaw / 2) / _far
+                - _from[2] * _u[2] / tan(thetaw / 2) / _far),
+        Vector4(_v[0] / tan(thetah/2) / _far,
+              _v[1] / tan(thetah/2) / _far,
+              _v[2] / tan(thetah/2) / _far,
+              - _from[0] * _v[0] / tan(thetah / 2) / _far
+              - _from[1] * _v[1] / tan(thetah / 2) / _far
+              - _from[2] * _v[2] / tan(thetah / 2) / _far),
+        Vector4(_n[0] / _far,
+                _n[1] / _far,
+                _n[2] / _far,
+                - (_n[0] * _from[0]) / _far - (_n[1] * _from[1]) / _far - (_n[2] * _from[2]) / _far),
         Vector4(0, 0, 0, 1)
     );
     
@@ -44,6 +42,20 @@ void Camera::initialize() {
         Vector4(0, 1, 0, 0),
         Vector4(0, 0, 1 / (k - 1), k / (k - 1)),
         Vector4(0, 0, -1, 0)
+    );
+    
+    _r = Matrix4(
+        Vector4(_u[0], _u[1], _u[2], 0),
+        Vector4(_v[0], _v[1], _v[2], 0),
+        Vector4(_n[0], _n[1], _n[2], 0),
+        Vector4(0, 0, 0, 1)
+    );
+    
+    _rinv = Matrix4(
+        Vector4(_u[0], _v[0], _n[0], 0),
+        Vector4(_u[1], _v[1], _n[1], 0),
+        Vector4(_u[2], _v[2], _n[2], 0),
+        Vector4(0, 0, 0, 1)
     );
 }
 
@@ -100,18 +112,13 @@ Matrix4 Camera::getWorldToCamera() const {
 
 Matrix4 Camera::getRotationFromXYZ() const
 {
-    // return just the rotation matrix
-
-    // Change this
-    return Matrix4::identity();
+    return _r;
 }
 
 Matrix4 Camera::getRotationToXYZ() const
 {
     // return just the rotation matrix
-
-    // Change this
-    return Matrix4::identity();
+    return _rinv;
 }
 
 Matrix4 Camera::getCameraToWorld() const {
@@ -137,8 +144,7 @@ Point3 Camera::getEye()  const{
 
 double Camera::getZoom() const
 {
-    // Change this
-    return 0;
+    return _width / 2 / tan(_fov / 2);
 }
 
 void Camera::setFrom(const Point3& from) {
@@ -174,6 +180,8 @@ void Camera::setWidthHeight(int w, int h) {
 
 void Camera::setZoom(double z) {
     // set field of view (specified in degrees)
+    _fov = atan(_width / 2 / z);
+    initialize();
 }
 
 void Camera::setNearFar(double n, double f) {
@@ -203,18 +211,19 @@ void Camera::moveForward(double dist) {
 }
 
 void Camera::moveSideways(double dist) {
-    Vector3 move = dist * (_v);
+    Vector3 move = dist * (_u);
     
-    _from -= move;
+    _from += move;
+    
+    initialize();
 }
 
 void Camera::moveVertical(double dist) {
     // move the camera vertically (along the up vector)
     // by the amount dist
+    Vector3 move = dist * (_v);
     
-    Vector3 move = dist * (_u);
-    
-    _from -= move;
+    _from += move;
 }
 
 void Camera::rotateYaw(double angle) {
@@ -237,15 +246,17 @@ void Camera::moveKeyboard( )
     // camera controls here, make sure you document your changes
     // in your README file
 
-    if (Fl::event_key('w'))
+    std::cout << Fl::event_key() << std::endl;
+    
+    if (Fl::event_key() == 'w')
         moveForward(+0.05);
-    if (Fl::event_key('s'))
+    if (Fl::event_key() == 's')
         moveForward(-0.05);
-    if (Fl::event_key('a'))
+    if (Fl::event_key() == 'a')
         moveSideways(-0.05);
-    if (Fl::event_key('d'))
+    if (Fl::event_key() == 'd')
         moveSideways(+0.05);
-    if (Fl::event_key(FL_Up))
+    if (Fl::event_key() == FL_Up)
         moveVertical(+0.05);
     if (Fl::event_key(FL_Down))
         moveVertical(-0.05);
