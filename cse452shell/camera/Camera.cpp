@@ -224,14 +224,25 @@ void Camera::moveVertical(double dist) {
     Vector3 move = dist * (_v);
     
     _from += move;
+    initialize();
 }
 
 void Camera::rotateYaw(double angle) {
     // rotate the camera left/right (around the up vector)
+    // change look vector
+    Matrix4 yaw = Matrix4::rotation(_up, angle);
+    _look = yaw * _look;
+    
+    initialize();
 }
 
 void Camera::rotatePitch(double angle) {
     // rotate the camera up/down (pitch angle)
+    // change look vector
+    Matrix4 pitch = Matrix4::rotation(_u, angle);
+    _look = pitch * _look;
+    
+    initialize();
 }
 
 void Camera::rotateAroundAtPoint(int axis, double angle, double focusDist) {
@@ -248,24 +259,24 @@ void Camera::moveKeyboard( )
 
     std::cout << Fl::event_key() << std::endl;
     
-    if (Fl::event_key() == 'w')
+    if (Fl::event_key('w') || Fl::event_key() == 'w')
         moveForward(+0.05);
-    if (Fl::event_key() == 's')
+    if (Fl::event_key('s') || Fl::event_key() == 's')
         moveForward(-0.05);
-    if (Fl::event_key() == 'a')
+    if (Fl::event_key('a') || Fl::event_key() == 'a')
         moveSideways(-0.05);
-    if (Fl::event_key() == 'd')
+    if (Fl::event_key('d') || Fl::event_key() == 'd')
         moveSideways(+0.05);
-    if (Fl::event_key() == FL_Up)
+    if (Fl::event_key(FL_Up) || Fl::event_key() == 'i')
         moveVertical(+0.05);
-    if (Fl::event_key(FL_Down))
+    if (Fl::event_key(FL_Down) || Fl::event_key() == 'k')
         moveVertical(-0.05);
-    if (Fl::event_key(FL_Left))
+    if (Fl::event_key(FL_Left) || Fl::event_key() == 'j')
         rotateYaw(+0.05);
-    if (Fl::event_key(FL_Right))
+    if (Fl::event_key(FL_Right) || Fl::event_key() == 'l')
         rotateYaw(-0.05);
-    if (Fl::event_key(FL_Page_Up))
+    if (Fl::event_key(FL_Page_Up) || Fl::event_key() == ',')
         rotatePitch(+0.05);
-    if (Fl::event_key(FL_Page_Down))
+    if (Fl::event_key(FL_Page_Down) || Fl::event_key() == '.')
         rotatePitch(-0.05);
 }
