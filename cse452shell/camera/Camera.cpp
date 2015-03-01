@@ -3,77 +3,146 @@
 #include <cmath>
 #include <FL/Fl.H>
 
-void Camera::initialize() {
-    _n = -_look.unit();
-    _v = (_up - (_up * _n) * _n).unit();
-    _u = (_v ^ _n).unit();
+void Camera::initialize(std::set<std::string> changed) {
+    if(changed.size() == 0) {
+        // Assume all changed
+        changed = {
+            "_from",
+            "_look",
+            "_up",
+            
+            "_fov",
+            
+            "_width",
+            "_height",
+            
+            "_near",
+            "_far"
+        };
+    }
     
-    _aspect = (double)_width / (double)_height;
+    if (changed.find("_look") != changed.end()) {
+        _n = -_look.unit();
+        changed.insert("_n");
+    }
     
-    double thetaw = _fov;
-    double thetah = _fov / _aspect;
+    if (changed.find("_up") != changed.end() || changed.find("_n") != changed.end()) {
+        _v = (_up - (_up * _n) * _n).unit();
+        
+        _u = (_v ^ _n).unit();
+        
+        changed.insert("_v");
+        changed.insert("_u");
+    }
+
+    if (changed.find("_width") != changed.end() || changed.find("_height") != changed.end()) {
+        _aspect = (double)_width / (double)_height;
+        
+        changed.insert("_aspect");
+    }
     
-    double k = _near / _far;
+    if (changed.find("_from") != changed.end()) {
+        _t = Matrix4(Vector4(1, 0, 0, -_from[0]),
+                     Vector4(0, 1, 0, -_from[1]),
+                     Vector4(0, 0, 1, -_from[2]),
+                     Vector4(0, 0, 0, 1));
+        
+        _tinv = Matrix4(Vector4(1, 0, 0, _from[0]),
+                        Vector4(0, 1, 0, _from[1]),
+                        Vector4(0, 0, 1, _from[2]),
+                        Vector4(0, 0, 0, 1));
+        
+        assert(Matrix4::identity().approxEqual(_t * _tinv));
+        
+        changed.insert("_t");
+        changed.insert("_tinv");
+    }
     
-    _t = Matrix4(Vector4(1, 0, 0, -_from[0]),
-                 Vector4(0, 1, 0, -_from[1]),
-                 Vector4(0, 0, 1, -_from[2]),
-                 Vector4(0, 0, 0, 1));
+    if (changed.find("_u") != changed.end() ||
+        changed.find("_v") != changed.end() ||
+        changed.find("_n") != changed.end()) {
+        _r = Matrix4(Vector4(_u[0], _u[1], _u[2], 0),
+                     Vector4(_v[0], _v[1], _v[2], 0),
+                     Vector4(_n[0], _n[1], _n[2], 0),
+                     Vector4(0, 0, 0, 1));
+        
+        _rinv = Matrix4(Vector4(_u[0], _v[0], _n[0], 0),
+                        Vector4(_u[1], _v[1], _n[1], 0),
+                        Vector4(_u[2], _v[2], _n[2], 0),
+                        Vector4(0, 0, 0, 1));
+        
+        assert(Matrix4::identity().approxEqual(_r * _rinv));
+        
+        changed.insert("_r");
+        changed.insert("_rinv");
+    }
     
-    _tinv = Matrix4(Vector4(1, 0, 0, _from[0]),
-                    Vector4(0, 1, 0, _from[1]),
-                    Vector4(0, 0, 1, _from[2]),
-                    Vector4(0, 0, 0, 1));
-    
-    assert(Matrix4::identity().approxEqual(_t * _tinv));
-    
-    _r = Matrix4(Vector4(_u[0], _u[1], _u[2], 0),
-                 Vector4(_v[0], _v[1], _v[2], 0),
-                 Vector4(_n[0], _n[1], _n[2], 0),
-                 Vector4(0, 0, 0, 1));
-    
-    _rinv = Matrix4(Vector4(_u[0], _v[0], _n[0], 0),
-                    Vector4(_u[1], _v[1], _n[1], 0),
-                    Vector4(_u[2], _v[2], _n[2], 0),
-                    Vector4(0, 0, 0, 1));
-    
-    assert(Matrix4::identity().approxEqual(_r * _rinv));
-    
-    _sxy = Matrix4(Vector4(1 / tan(thetaw / 2), 0, 0, 0),
-                   Vector4(0, 1 / tan(thetah / 2), 0, 0),
-                   Vector4(0, 0, 1, 0),
-                   Vector4(0, 0, 0, 1));
-    
-    _sxyinv = Matrix4(Vector4(tan(thetaw / 2), 0, 0, 0),
-                      Vector4(0, tan(thetah / 2), 0, 0),
-                      Vector4(0, 0, 1, 0),
-                      Vector4(0, 0, 0, 1));
-    
-    assert(Matrix4::identity().approxEqual(_sxy * _sxyinv));
-    
-    _sxyz = Matrix4(Vector4(1 / _far, 0, 0, 0),
-                    Vector4(0, 1 / _far, 0, 0),
-                    Vector4(0, 0, 1 / _far, 0),
-                    Vector4(0, 0, 0, 1));
-    
-    _sxyzinv = Matrix4(Vector4(_far, 0, 0, 0),
-                       Vector4(0, _far, 0, 0),
-                       Vector4(0, 0, _far, 0),
+    if (changed.find("_fov") != changed.end() ||
+        changed.find("_aspect") != changed.end()) {
+        double thetaw = _fov;
+        double thetah = _fov / _aspect;
+        
+        _sxy = Matrix4(Vector4(1 / tan(thetaw / 2), 0, 0, 0),
+                       Vector4(0, 1 / tan(thetah / 2), 0, 0),
+                       Vector4(0, 0, 1, 0),
                        Vector4(0, 0, 0, 1));
-
-    assert(Matrix4::identity().approxEqual(_sxyz * _sxyzinv));
+        
+        _sxyinv = Matrix4(Vector4(tan(thetaw / 2), 0, 0, 0),
+                          Vector4(0, tan(thetah / 2), 0, 0),
+                          Vector4(0, 0, 1, 0),
+                          Vector4(0, 0, 0, 1));
+        
+        assert(Matrix4::identity().approxEqual(_sxy * _sxyinv));
+        
+        changed.insert("_sxy");
+        changed.insert("_sxyinv");
+    }
     
-    _wtc = _sxyz * _sxy * _r * _t;
-    _ctw = _tinv * _rinv * _sxyinv * _sxyzinv;
-
-    assert(Matrix4::identity().approxEqual(_wtc * _ctw));
+    if (changed.find("_far") != changed.end()) {
+        _sxyz = Matrix4(Vector4(1 / _far, 0, 0, 0),
+                        Vector4(0, 1 / _far, 0, 0),
+                        Vector4(0, 0, 1 / _far, 0),
+                        Vector4(0, 0, 0, 1));
+        
+        _sxyzinv = Matrix4(Vector4(_far, 0, 0, 0),
+                           Vector4(0, _far, 0, 0),
+                           Vector4(0, 0, _far, 0),
+                           Vector4(0, 0, 0, 1));
+        
+        assert(Matrix4::identity().approxEqual(_sxyz * _sxyzinv));
+        
+        changed.insert("_sxyz");
+        changed.insert("_sxyzinv");
+    }
     
-    _proj = Matrix4(
-        Vector4(1, 0, 0, 0),
-        Vector4(0, 1, 0, 0),
-        Vector4(0, 0, 1 / (k - 1), k / (k - 1)),
-        Vector4(0, 0, -1, 0)
-    );
+    if (changed.find("_sxyz") != changed.end() ||
+        changed.find("_sxy") != changed.end() ||
+        changed.find("_r") != changed.end() ||
+        changed.find("_t") != changed.end() ||
+        changed.find("_sxyzinv") != changed.end() ||
+        changed.find("_sxyinv") != changed.end() ||
+        changed.find("_rinv") != changed.end() ||
+        changed.find("_tinv") != changed.end()) {
+        
+        _wtc = _sxyz * _sxy * _r * _t;
+        _ctw = _tinv * _rinv * _sxyinv * _sxyzinv;
+        
+        assert(Matrix4::identity().approxEqual(_wtc * _ctw));
+        
+        changed.insert("_wtc");
+    }
+    
+    if (changed.find("_near") != changed.end() ||
+        changed.find("_far") != changed.end()) {
+        double k = _near / _far;
+        
+        _proj = Matrix4(Vector4(1, 0, 0, 0),
+                        Vector4(0, 1, 0, 0),
+                        Vector4(0, 0, 1 / (k - 1), k / (k - 1)),
+                        Vector4(0, 0, -1, 0));
+        
+        changed.insert("_proj");
+    }
 }
 
 Camera::~Camera() {
@@ -167,45 +236,45 @@ double Camera::getZoom() const
 void Camera::setFrom(const Point3& from) {
     // set the current viewpoint (eye point)
     _from = from;
-    initialize();
+    initialize({"_from"});
 }
 
 void Camera::setAt(const Point3& at) {
     // set the point the camera is looking at
     _look = at - _from;
-    initialize();
+    initialize({"_look"});
 }
 
 void Camera::setLook(const Vector3& l) {
     // set the direction the camera is looking at
     _look = l;
-    initialize();
+    initialize({"_look"});
 }
 
 void Camera::setUp(const Vector3& up) {
     // set the upwards direction of the camera
     _up = up;
-    initialize();
+    initialize({"_up"});
 }
 
 void Camera::setWidthHeight(int w, int h) {
     // set the current width and height of the film plane
     _width = w;
     _height = h;
-    initialize();
+    initialize({"_width", "_height"});
 }
 
 void Camera::setZoom(double z) {
     // set field of view (specified in degrees)
     _fov = atan(_width / 2 / z);
-    initialize();
+    initialize({"_fov"});
 }
 
 void Camera::setNearFar(double n, double f) {
     // set the near and far clipping planes
     _near = n;
     _far = f;
-    initialize();
+    initialize({"_near", "_far"});
 }
 
 void Camera::setSkew( double d )
@@ -215,7 +284,7 @@ void Camera::setSkew( double d )
 void Camera::setAspectRatioScale( double d )
 {
     _height = _width / d;
-    initialize();
+    initialize({"_height"});
 }
 
 void Camera::setProjectionCenter( const Point3 &p )
@@ -226,7 +295,7 @@ void Camera::moveForward(double dist) {
     Vector3 move = dist * (_from - Point3(0, 0, 0)).unit();
     
     _from -= move;
-    initialize();
+    initialize({"_from"});
 }
 
 void Camera::moveSideways(double dist) {
@@ -234,7 +303,7 @@ void Camera::moveSideways(double dist) {
     
     _from += move;
     
-    initialize();
+    initialize({"_from"});
 }
 
 void Camera::moveVertical(double dist) {
@@ -243,7 +312,7 @@ void Camera::moveVertical(double dist) {
     Vector3 move = dist * (_v);
     
     _from += move;
-    initialize();
+    initialize({"_from"});
 }
 
 void Camera::rotateYaw(double angle) {
@@ -252,7 +321,7 @@ void Camera::rotateYaw(double angle) {
     Matrix4 yaw = Matrix4::rotation(_v, angle);
     _look = yaw * _look;
     
-    initialize();
+    initialize({"_look"});
 }
 
 void Camera::rotatePitch(double angle) {
@@ -261,7 +330,7 @@ void Camera::rotatePitch(double angle) {
     Matrix4 pitch = Matrix4::rotation(_u, angle);
     _look = pitch * _look;
     
-    initialize();
+    initialize({"_look"});
 }
 
 void Camera::rotateAroundAtPoint(int axis, double angle, double focusDist) {
@@ -286,7 +355,7 @@ void Camera::rotateAroundAtPoint(int axis, double angle, double focusDist) {
     }
     
     _look = rot * _look;
-    initialize();
+    initialize({"_look"});
 }
 
 
