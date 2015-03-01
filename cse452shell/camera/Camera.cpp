@@ -198,18 +198,23 @@ void Camera::setProjectionCenter( const Point3 &p )
 void Camera::moveForward(double dist) {
     Vector3 move = dist * (_from - Point3(0, 0, 0)).unit();
     
-    _from += move;
+    _from -= move;
     initialize();
 }
 
 void Camera::moveSideways(double dist) {
-    // move the camera sideways (orthogonal to the viewing direction)
-    // by the amount dist
+    Vector3 move = dist * (_v);
+    
+    _from -= move;
 }
 
 void Camera::moveVertical(double dist) {
     // move the camera vertically (along the up vector)
     // by the amount dist
+    
+    Vector3 move = dist * (_u);
+    
+    _from -= move;
 }
 
 void Camera::rotateYaw(double angle) {
