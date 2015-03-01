@@ -17,7 +17,7 @@ Program may be built using the `.vcxproj`.
 
 ### Additions
 
-Vector normalization is now a const operation.
+Vector normalization is now a const operation.w
 
 
 ## Shapes

@@ -196,8 +196,10 @@ void Camera::setProjectionCenter( const Point3 &p )
 }
 
 void Camera::moveForward(double dist) {
-    // move the camera forward (in the viewing direction)
-    // by the amount dist
+    Vector3 move = dist * (_from - Point3(0, 0, 0)).unit();
+    
+    _from += move;
+    initialize();
 }
 
 void Camera::moveSideways(double dist) {
