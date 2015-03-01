@@ -13,6 +13,13 @@ Program may be accessed in the `product/` directory.
 
 Program may be built using the `.vcxproj`.
 
+## Camera
+
+### Additions
+
+Vector normalization is now a const operation.
+
+
 ## Shapes
 
 ### Parameters

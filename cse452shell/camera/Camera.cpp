@@ -3,35 +3,71 @@
 #include <cmath>
 #include <FL/Fl.H>
 
-Camera::Camera() 
-{
-    // initialize your data here
+void Camera::initialize() {
+    _n = -_look.unit();
+    _v = (_up - (_up * _n) * _n).unit();
+    _u = (_v ^ _n).unit();
+    
+    _aspect = (double)_width / (double)_height;
+    
+    double thetaw = _fov / 180 * 3.1415;
+    double thetah = _fov / 180 * 3.1415 / _aspect;
+    
+    double df = _far;
+    
+    double k = _near / _far;
+    
+    _wtc = Matrix4(
+        Vector4(_u[0] / tan(thetaw/2) / df,
+                _u[1] / tan(thetaw/2) / df,
+                _u[2] / tan(thetaw/2) / df,
+                - _from[0] * _u[0] / tan(thetaw / 2) / df
+                - _from[1] * _u[1] / tan(thetaw / 2) / df
+                - _from[2] * _u[2] / tan(thetaw / 2) / df),
+        Vector4(_v[0] / tan(thetah/2) / df,
+              _v[1] / tan(thetah/2) / df,
+              _v[2] / tan(thetah/2) / df,
+              - _from[0] * _v[0] / tan(thetah / 2) / df
+              - _from[1] * _v[1] / tan(thetah / 2) / df
+              - _from[2] * _v[2] / tan(thetah / 2) / df),
+        Vector4(_n[0] / df,
+                _n[1] / df,
+                _n[2] / df,
+                - (_n[0] * _from[0]) / df - (_n[1] * _from[1]) / df - (_n[2] * _from[2]) / df),
+        Vector4(0, 0, 0, 1)
+    );
+    
+    _ctw = Matrix4::identity();
+    
+    _proj = Matrix4(
+        Vector4(1, 0, 0, 0),
+        Vector4(0, 1, 0, 0),
+        Vector4(0, 0, 1 / (k - 1), k / (k - 1)),
+        Vector4(0, 0, -1, 0)
+    );
 }
 
 Camera::~Camera() {
-    // destroy your data here
 }
 
 // The following three should be unit length and orthogonal to each other
 // u vector
 Vector3 Camera::getRight() const
 {
-    // Change this
-    return Vector3(0,0,0);
+    return _u;
 }
 
 // v vector
 Vector3 Camera::getUp() const
 {
-    // Change this
-    return Vector3(0,0,0);
+    return _v;
 }
 
 // - n vector
 Vector3 Camera::getLook() const
 {
-    // Change this
-    return Vector3(0,0,0);
+    // l = -n
+    return -_n;
 }
 
 double Camera::getSkew() const
@@ -42,8 +78,7 @@ double Camera::getSkew() const
 
 double Camera::getAspectRatioScale() const
 {
-    // Change this to implement the extra credit
-    return 1.0;
+    return _aspect;
 }
 
 Point3 Camera::getProjectionCenter() const
@@ -54,17 +89,13 @@ Point3 Camera::getProjectionCenter() const
 
 Matrix4 Camera::getProjection() const {
     // return the current projection and scale matrix
-
-    // Change this
-    return Matrix4::identity();
+    return _proj;
 }
 
 Matrix4 Camera::getWorldToCamera() const {
     // return the current world to camera matrix
     // Rotation and translation
-
-    // Change this
-    return Matrix4::identity();
+    return _wtc;
 }
 
 Matrix4 Camera::getRotationFromXYZ() const
@@ -86,30 +117,22 @@ Matrix4 Camera::getRotationToXYZ() const
 Matrix4 Camera::getCameraToWorld() const {
     // return the current camera to world matrix
     // This is the inverse of the rotation, translation, and scale
-
-    // Change this
-    return Matrix4::identity();
+    return _ctw;
 }
 
 int Camera::getWidth()  const{
     // return the current image width
-
-    // Change this
-    return 0;
+    return _width;
 }
 
 int Camera::getHeight()  const{
     // return the current image height
-
-    // Change this
-    return 0;
+    return _height;
 }
 
 Point3 Camera::getEye()  const{
     // return the current eye location
-
-    // Change this
-    return Point3(0.0, 0.0, 0.0);
+    return _from;
 }
 
 double Camera::getZoom() const
@@ -120,32 +143,44 @@ double Camera::getZoom() const
 
 void Camera::setFrom(const Point3& from) {
     // set the current viewpoint (eye point)
+    _from = from;
+    initialize();
 }
 
 void Camera::setAt(const Point3& at) {
     // set the point the camera is looking at
-    // calling this requires that the from (or eye) point already be valid
+    _look = at - _from;
+    initialize();
 }
 
 void Camera::setLook(const Vector3& l) {
     // set the direction the camera is looking at
+    _look = l;
+    initialize();
 }
 
 void Camera::setUp(const Vector3& up) {
     // set the upwards direction of the camera
+    _up = up;
+    initialize();
 }
 
 void Camera::setWidthHeight(int w, int h) {
     // set the current width and height of the film plane
+    _width = w;
+    _height = h;
+    initialize();
 }
 
 void Camera::setZoom(double z) {
     // set field of view (specified in degrees)
-    
 }
 
 void Camera::setNearFar(double n, double f) {
     // set the near and far clipping planes
+    _near = n;
+    _far = f;
+    initialize();
 }
 
 void Camera::setSkew( double d )
@@ -186,7 +221,6 @@ void Camera::rotatePitch(double angle) {
 void Camera::rotateAroundAtPoint(int axis, double angle, double focusDist) {
     // Rotate the camera around the right (0), up (1), or look (2) vector
     // around the point at eye + look * focusDist
-
 }
 
 

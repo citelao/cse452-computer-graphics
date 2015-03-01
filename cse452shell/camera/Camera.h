@@ -8,7 +8,13 @@
 
 class Camera {
 public:
-    Camera();
+    Camera()
+    : Camera(Point3(0, 0, 0), Point3(0, 0, 1), Vector3(0, 1, 0), 90, 0.1, 30, 640, 480) {};
+    Camera(Point3 from, Point3 at, Vector3 up, double fov, double near, double far, int width, int height)
+    : _from(from), _look(at - from), _up(up), _fov(fov), _near(near), _far(far), _width(width), _height(height) {
+        initialize();
+    };
+    
     ~Camera();
     
     // Perspective plus scale (x,y, and z)
@@ -28,7 +34,7 @@ public:
     int getHeight() const;
 
     // Camera orientation, position _after_ normalization
-    Point3  getEye() const;
+    Point3 getEye() const;
     // These should be unit length and orthogonal to each other
     // u vector
     Vector3 getRight() const;
@@ -74,7 +80,31 @@ public:
     void rotateAroundAtPoint(int axis, double angle, double focusDist);
 
 private:
-    // declare your variables here:
+    // These are the mutable, user-settable variables.
+    // Everything is calculated from them.
+    Point3 _from;
+    Vector3 _look;
+    Vector3 _up;
+    
+    double _fov;
+    double _aspect;
+    
+    int _width;
+    int _height;
+    
+    double _near;
+    double _far;
+    
+    void initialize();
+    
+    Vector3 _u;
+    Vector3 _v;
+    Vector3 _n;
+    
+    Matrix4 _proj;
+    Matrix4 _wtc;
+    Matrix4 _ctw;
+    
 };
 
 #endif /* _MY_CAMERA_H_ */

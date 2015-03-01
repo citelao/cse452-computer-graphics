@@ -106,10 +106,19 @@ double Vector3::lengthSquared() const
     return x * x + y * y + z * z;
 }
 
-void Vector3::normalize()
+void Vector3::normalize() {
+    double s = 1.0 / (double) sqrt(x * x + y * y + z * z);
+    x *= s;
+    y *= s;
+    z *= s;
+}
+
+Vector3 Vector3::unit() const
 {
     double s = 1.0 / (double) sqrt(x * x + y * y + z * z);
-    x *= s; y *= s; z *= s;
+    return Vector3( x * s,
+                    y * s,
+                    z * s );
 }
 
 bool Vector3::operator==( const Vector3 &v ) const

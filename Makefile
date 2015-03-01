@@ -57,7 +57,7 @@ $(BRUSHOBJ): $(OBJDIR)%.o: $(CODEDIR)brush/%.cpp
 $(SHAPESOBJ): $(OBJDIR)%.o: $(CODEDIR)shapes/%.cpp $(CODEDIR)shapes/%.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(CAMERAOBJ): $(OBJDIR)%.o: $(CODEDIR)camera/%.cpp
+$(CAMERAOBJ): $(OBJDIR)%.o: $(CODEDIR)camera/%.cpp $(CODEDIR)camera/%.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 $(SCENEOBJ): $(OBJDIR)%.o: $(CODEDIR)sceneview/%.cpp

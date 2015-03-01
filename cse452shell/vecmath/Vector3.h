@@ -33,6 +33,7 @@ public:
     double length() const;
     double lengthSquared() const;
     void normalize();
+    Vector3 unit() const;
     bool operator==( const Vector3 &v ) const;
     bool operator!=( const Vector3 &v ) const;
     bool approxEqual( const Vector3 &v, double eps = V3AE_EPSILON ) const;
