@@ -95,17 +95,25 @@ private:
     double _near;
     double _far;
     
-    void initialize();
+    void initialize(length);
     
     Vector3 _u;
     Vector3 _v;
     Vector3 _n;
     
+    // Component matrices
+    Matrix4 _t;
+    Matrix4 _tinv;
+    Matrix4 _r;
+    Matrix4 _rinv;
+    Matrix4 _sxy;
+    Matrix4 _sxyinv;
+    Matrix4 _sxyz;
+    Matrix4 _sxyzinv;
+    
     Matrix4 _proj;
     Matrix4 _wtc;
     Matrix4 _ctw;
-    Matrix4 _r;
-    Matrix4 _rinv;
     
 };
 

@@ -15,47 +15,64 @@ void Camera::initialize() {
     
     double k = _near / _far;
     
-    _wtc = Matrix4(
-        Vector4(_u[0] / tan(thetaw/2) / _far,
-                _u[1] / tan(thetaw/2) / _far,
-                _u[2] / tan(thetaw/2) / _far,
-                - _from[0] * _u[0] / tan(thetaw / 2) / _far
-                - _from[1] * _u[1] / tan(thetaw / 2) / _far
-                - _from[2] * _u[2] / tan(thetaw / 2) / _far),
-        Vector4(_v[0] / tan(thetah/2) / _far,
-              _v[1] / tan(thetah/2) / _far,
-              _v[2] / tan(thetah/2) / _far,
-              - _from[0] * _v[0] / tan(thetah / 2) / _far
-              - _from[1] * _v[1] / tan(thetah / 2) / _far
-              - _from[2] * _v[2] / tan(thetah / 2) / _far),
-        Vector4(_n[0] / _far,
-                _n[1] / _far,
-                _n[2] / _far,
-                - (_n[0] * _from[0]) / _far - (_n[1] * _from[1]) / _far - (_n[2] * _from[2]) / _far),
-        Vector4(0, 0, 0, 1)
-    );
+    _t = Matrix4(Vector4(1, 0, 0, -_from[0]),
+                 Vector4(0, 1, 0, -_from[1]),
+                 Vector4(0, 0, 1, -_from[2]),
+                 Vector4(0, 0, 0, 1));
     
-    _ctw = Matrix4::identity();
+    _tinv = Matrix4(Vector4(1, 0, 0, _from[0]),
+                    Vector4(0, 1, 0, _from[1]),
+                    Vector4(0, 0, 1, _from[2]),
+                    Vector4(0, 0, 0, 1));
+    
+    assert(Matrix4::identity().approxEqual(_t * _tinv));
+    
+    _r = Matrix4(Vector4(_u[0], _u[1], _u[2], 0),
+                 Vector4(_v[0], _v[1], _v[2], 0),
+                 Vector4(_n[0], _n[1], _n[2], 0),
+                 Vector4(0, 0, 0, 1));
+    
+    _rinv = Matrix4(Vector4(_u[0], _v[0], _n[0], 0),
+                    Vector4(_u[1], _v[1], _n[1], 0),
+                    Vector4(_u[2], _v[2], _n[2], 0),
+                    Vector4(0, 0, 0, 1));
+    
+    assert(Matrix4::identity().approxEqual(_r * _rinv));
+    
+    _sxy = Matrix4(Vector4(1 / tan(thetaw / 2), 0, 0, 0),
+                   Vector4(0, 1 / tan(thetah / 2), 0, 0),
+                   Vector4(0, 0, 1, 0),
+                   Vector4(0, 0, 0, 1));
+    
+    _sxyinv = Matrix4(Vector4(tan(thetaw / 2), 0, 0, 0),
+                      Vector4(0, tan(thetah / 2), 0, 0),
+                      Vector4(0, 0, 1, 0),
+                      Vector4(0, 0, 0, 1));
+    
+    assert(Matrix4::identity().approxEqual(_sxy * _sxyinv));
+    
+    _sxyz = Matrix4(Vector4(1 / _far, 0, 0, 0),
+                    Vector4(0, 1 / _far, 0, 0),
+                    Vector4(0, 0, 1 / _far, 0),
+                    Vector4(0, 0, 0, 1));
+    
+    _sxyzinv = Matrix4(Vector4(_far, 0, 0, 0),
+                       Vector4(0, _far, 0, 0),
+                       Vector4(0, 0, _far, 0),
+                       Vector4(0, 0, 0, 1));
+
+    assert(Matrix4::identity().approxEqual(_sxyz * _sxyzinv));
+    
+    _wtc = _sxyz * _sxy * _r * _t;
+    _ctw = _tinv * _rinv * _sxyinv * _sxyzinv;
+
+    assert(Matrix4::identity().approxEqual(_wtc * _ctw));
     
     _proj = Matrix4(
         Vector4(1, 0, 0, 0),
         Vector4(0, 1, 0, 0),
         Vector4(0, 0, 1 / (k - 1), k / (k - 1)),
         Vector4(0, 0, -1, 0)
-    );
-    
-    _r = Matrix4(
-        Vector4(_u[0], _u[1], _u[2], 0),
-        Vector4(_v[0], _v[1], _v[2], 0),
-        Vector4(_n[0], _n[1], _n[2], 0),
-        Vector4(0, 0, 0, 1)
-    );
-    
-    _rinv = Matrix4(
-        Vector4(_u[0], _v[0], _n[0], 0),
-        Vector4(_u[1], _v[1], _n[1], 0),
-        Vector4(_u[2], _v[2], _n[2], 0),
-        Vector4(0, 0, 0, 1)
     );
 }
 
@@ -197,6 +214,8 @@ void Camera::setSkew( double d )
 
 void Camera::setAspectRatioScale( double d )
 {
+    _height = _width / d;
+    initialize();
 }
 
 void Camera::setProjectionCenter( const Point3 &p )
@@ -230,7 +249,7 @@ void Camera::moveVertical(double dist) {
 void Camera::rotateYaw(double angle) {
     // rotate the camera left/right (around the up vector)
     // change look vector
-    Matrix4 yaw = Matrix4::rotation(_up, angle);
+    Matrix4 yaw = Matrix4::rotation(_v, angle);
     _look = yaw * _look;
     
     initialize();
@@ -248,6 +267,26 @@ void Camera::rotatePitch(double angle) {
 void Camera::rotateAroundAtPoint(int axis, double angle, double focusDist) {
     // Rotate the camera around the right (0), up (1), or look (2) vector
     // around the point at eye + look * focusDist
+    Matrix4 rot = Matrix4::identity();
+    switch (axis) {
+        case 0: // right
+            rot = Matrix4::rotation(_u, angle);
+            break;
+            
+        case 1: // up
+            rot = Matrix4::rotation(_v, angle);
+            break;
+            
+        case 2: //look
+            /// ???
+            break;
+            
+        default:
+            break;
+    }
+    
+    _look = rot * _look;
+    initialize();
 }
 
 
