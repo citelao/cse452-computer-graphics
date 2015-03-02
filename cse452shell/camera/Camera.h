@@ -113,8 +113,12 @@ private:
     Matrix4 _sxyinv;
     Matrix4 _sxyz;
     Matrix4 _sxyzinv;
+    Matrix4 _d;
+    Matrix4 _dinv;
     
     Matrix4 _proj;
+    Matrix4 _projinv;
+
     Matrix4 _wtc;
     Matrix4 _ctw;
 };

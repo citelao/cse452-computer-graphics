@@ -118,31 +118,51 @@ void Camera::initialize(std::vector<std::string> changed) {
         changed.push_back("_sxyzinv");
     }
     
-    if (std::find(changed.begin(), changed.end(), "_sxyz") != changed.end() ||
-        std::find(changed.begin(), changed.end(), "_sxy") != changed.end() ||
-        std::find(changed.begin(), changed.end(), "_r") != changed.end() ||
-        std::find(changed.begin(), changed.end(), "_t") != changed.end() ||
-        std::find(changed.begin(), changed.end(), "_sxyzinv") != changed.end() ||
-        std::find(changed.begin(), changed.end(), "_sxyinv") != changed.end() ||
-        std::find(changed.begin(), changed.end(), "_rinv") != changed.end() ||
-        std::find(changed.begin(), changed.end(), "_tinv") != changed.end()) {
-        
-        _wtc = _sxyz * _sxy * _r * _t;
-        _ctw = _tinv * _rinv * _sxyinv * _sxyzinv;
-        
-        assert(Matrix4::identity().approxEqual(_wtc * _ctw));
-        
-        changed.push_back("_wtc");
-    }
-    
     if (std::find(changed.begin(), changed.end(), "_near") != changed.end() ||
         std::find(changed.begin(), changed.end(), "_far") != changed.end()) {
         double k = _near / _far;
         
-        _proj = Matrix4(Vector4(1, 0, 0, 0),
+        _d = Matrix4(Vector4(1, 0, 0, 0),
+                     Vector4(0, 1, 0, 0),
+                     Vector4(0, 0, 1 / (k - 1), k / (k - 1)),
+                     Vector4(0, 0, -1, 0));
+        
+        _dinv = Matrix4(Vector4(1, 0, 0, 0),
                         Vector4(0, 1, 0, 0),
-                        Vector4(0, 0, 1 / (k - 1), k / (k - 1)),
-                        Vector4(0, 0, -1, 0));
+                        Vector4(0, 0, 0, -1),
+                        Vector4(0, 0, (-1 + k) / k, 1 / k));
+        
+        assert(Matrix4::identity().approxEqual(_d * _dinv));
+        
+        changed.push_back("_d");
+        changed.push_back("_dinv");
+    }
+    
+    if (std::find(changed.begin(), changed.end(), "_sxy") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_r") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_t") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_sxyinv") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_rinv") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_tinv") != changed.end()) {
+        
+        _wtc = _sxy * _r * _t;
+        _ctw = _tinv * _rinv * _sxyinv;
+        
+        assert(Matrix4::identity().approxEqual(_wtc * _ctw));
+        
+        changed.push_back("_wtc");
+        changed.push_back("_ctw");
+    }
+    
+    if (std::find(changed.begin(), changed.end(), "_sxyz") != changed.end() ||
+        std::find(changed.begin(), changed.end(), "_d") != changed.end()) {
+        _proj = _d * _sxyz;
+        _projinv = _sxyzinv * _dinv;
+//
+//        _proj = Matrix4(Vector4(1, 0, 0, 0),
+//                        Vector4(0, 1, 0, 0),
+//                        Vector4(0, 0, - 2 / _far, - (_near + _far) / (_far - _near)),
+//                        Vector4(0, 0, 0, 1));
         
         changed.push_back("_proj");
     }
