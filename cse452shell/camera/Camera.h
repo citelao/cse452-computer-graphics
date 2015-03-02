@@ -11,8 +11,18 @@
 
 class Camera {
 public:
-    Camera()
-    : Camera(Point3(0, 0, 0), Point3(0, 0, 1), Vector3(0, 1, 0), 3.1415/2, 0.1, 30, 640, 480) {};
+    Camera() {
+        _from = Point3(0, 0, 0);
+        _look = Vector3(0, 0, 1);
+        _up = Vector3(0, 1, 0);
+        _fov = 3.1415/2;
+        _near = 0.1;
+        _far = 30;
+        _width = 640;
+        _height = 480;
+        
+        initialize();
+    };
     Camera(Point3 from, Point3 at, Vector3 up, double fov, double near, double far, int width, int height)
     : _from(from), _look(at - from), _up(up), _fov(fov), _near(near), _far(far), _width(width), _height(height) {
         initialize();

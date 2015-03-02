@@ -306,7 +306,7 @@ void Camera::setSkew( double d )
 
 void Camera::setAspectRatioScale( double d )
 {
-    _height = _width / d;
+    _height = (double)_width / d;
     initialize({"_height"});
 }
 
