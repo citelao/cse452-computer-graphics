@@ -17,8 +17,7 @@ Program may be built using the `.vcxproj`.
 
 ### Additions
 
-Vector normalization is now a const operation.w
-
+Added `unit() cost` method to Vector class. Much easier than `normalize()`.
 
 ## Shapes
 
