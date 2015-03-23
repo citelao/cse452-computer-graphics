@@ -25,7 +25,7 @@
 
 class Cylinder : public Shape {
     public:
-        Cylinder(int topdiv, int sidediv);
+        Cylinder(int topdiv = 10, int sidediv = 2);
         void draw();
     
     private:

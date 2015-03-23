@@ -25,7 +25,7 @@
 
 class Cone : public Shape {
 public:
-    Cone(int topdiv, int sidediv);
+    Cone(int topdiv = 10, int sidediv = 2);
     void draw();
     
 private:

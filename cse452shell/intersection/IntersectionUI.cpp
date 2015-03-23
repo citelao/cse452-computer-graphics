@@ -20,6 +20,22 @@
 
 IntersectionUI::IntersectionUI() {
     width = height = 0;
+    
+    sphere = new RaySphere();
+    classicSphere = new Sphere();
+    
+    cylinder = new RayCylinder();
+    classicCylinder = new Cylinder();
+    
+    cone = new RayCone();
+    classicCone = new Cone();
+    
+    cube = new RayCube();
+    classicCube = new Cube();
+    
+    currentShape = sphere;
+    currentClassicShape = classicSphere;
+
 }
 
 IntersectionUI::~IntersectionUI() {
@@ -149,9 +165,13 @@ void IntersectionUI::draw() {
     // ToDo: draw your shape here and perform the intersection
     // then call drawHits so you can see where the ray has hit the shape
     // the origin is in variable 'p' and direction in variable 'dir'
-
-    //Call HitRecord hr = intersect(pE1, dir);
-    //drawHits(hr);
+    currentClassicShape->draw();
+    
+    HitRecord hr = currentShape->intersect(pE1, dir);
+    drawHits(hr);
+    
+    hr = currentShape->intersect(pE2, dir);
+    drawHits(hr);
 
     endDrawing();
 }
@@ -183,10 +203,22 @@ void IntersectionUI::changeShape( ShapesUI::ShapeType type )
 {
     // ToDo: Change which shape
     switch ( type ) {
-    case ShapesUI::SHAPE_SPHERE : break;
-    case ShapesUI::SHAPE_CYLINDER : break;
-    case ShapesUI::SHAPE_CONE : break;
-    case ShapesUI::SHAPE_CUBE : break;
+        case ShapesUI::SHAPE_SPHERE:
+            currentShape = sphere;
+            currentClassicShape = classicSphere;
+            break;
+        case ShapesUI::SHAPE_CYLINDER:
+            currentShape = cylinder;
+            currentClassicShape = classicCylinder;
+            break;
+        case ShapesUI::SHAPE_CONE:
+            currentShape = cone;
+            currentClassicShape = classicCone;
+            break;
+        case ShapesUI::SHAPE_CUBE:
+            currentShape = cube;
+            currentClassicShape = classicCube;
+            break;
     }
 }
 
@@ -253,18 +285,21 @@ void IntersectionUI::writeTest() const {
         dir[2] = cos(values[2] * M_PI);
         
         HitRecord cubeHr, cylinderHr, coneHr, sphereHr;
-        // ToDo: intersect with your shapes here and store the result
-        // in the appropriate hit record
-        //cube.intersect(p, dir);
-        //cylinder.intersect(p, dir);
-        //coneHr = cone.intersect(p, dir);
-        //sphereHr = sphere.intersect(p, dir);
+        cubeHr = cube->intersect(p, dir);
+        cylinderHr = cylinder->intersect(p, dir);
+        coneHr = cone->intersect(p, dir);
+        sphereHr = sphere->intersect(p, dir);
 
         // write out
         file << i << " Cube     " << cubeHr     << std::endl;
         file << i << " Cylinder " << cylinderHr << std::endl;
         file << i << " Cone     " << coneHr     << std::endl;
         file << i << " Sphere   " << sphereHr   << std::endl;
+        
+        std::cout << i << " Cube     " << cubeHr     << std::endl;
+        std::cout << i << " Cylinder " << cylinderHr << std::endl;
+        std::cout << i << " Cone     " << coneHr     << std::endl;
+        std::cout << i << " Sphere   " << sphereHr   << std::endl;
     }
     file.close();
 }

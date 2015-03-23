@@ -25,7 +25,7 @@
 
 class Cube : public Shape {
 public:
-    Cube(int topdiv, int sidediv);
+    Cube(int topdiv = 2, int sidediv = 0);
     void draw();
     
 private:

@@ -21,7 +21,9 @@ BRUSHOBJ = $(OBJDIR)MyBrush_UI.o $(OBJDIR)MyBrush.o  $(OBJDIR)BrushInterface.o
 SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o $(OBJDIR)Shape.o $(OBJDIR)Cylinder.o $(OBJDIR)Cube.o $(OBJDIR)Cone.o $(OBJDIR)Sphere.o
 CAMERAOBJ = $(OBJDIR)CameraInterface.o $(OBJDIR)CameraUI.o $(OBJDIR)IBar.o $(OBJDIR)Camera.o
 SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)MyScene_draw.o 
-INTERSECTOBJ  = $(OBJDIR)IntersectionInterface.o $(OBJDIR)IntersectionUI.o
+# This has been updated to add my own shapes code
+# INTERSECTOBJ  = $(OBJDIR)IntersectionInterface.o $(OBJDIR)IntersectionUI.o
+INTERSECTOBJ  = $(OBJDIR)IntersectionInterface.o $(OBJDIR)IntersectionUI.o $(OBJDIR)RayShape.o $(OBJDIR)RaySphere.o $(OBJDIR)RayCylinder.o $(OBJDIR)RayCone.o $(OBJDIR)RayCube.o
 USEROBJ =  $(OBJDIR)InteractiveInterface.o $(OBJDIR)InteractiveUI.o $(OBJDIR)InteractiveWidget.o $(OBJDIR)MyScene_select.o 
 RENDEROBJ = $(OBJDIR)MyScene_render.o $(OBJDIR)RenderingUI.o $(OBJDIR)RenderingInterface.o
 
@@ -33,7 +35,7 @@ INCS =  -I$(FLTKINCDIR) -I/usr/X11R6/iQnclude -I. -I$(CODEDIR)vecmath -I$(CODEDI
 
 BIN = $(OUTDIR)cse452shell
 CXXFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -g -O0
-LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -framework Carbon -framework AGL -g 
+LDFLAGS = $(INCS) -DLINUX -Wextra -std=c++11 -framework Carbon -framework AGL -g -O0
 
 .PHONY: all all-before all-after clean clean-custom
 
@@ -63,7 +65,7 @@ $(CAMERAOBJ): $(OBJDIR)%.o: $(CODEDIR)camera/%.cpp $(CODEDIR)camera/%.h
 $(SCENEOBJ): $(OBJDIR)%.o: $(CODEDIR)sceneview/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(INTERSECTOBJ): $(OBJDIR)%.o: $(CODEDIR)intersection/%.cpp
+$(INTERSECTOBJ): $(OBJDIR)%.o: $(CODEDIR)intersection/%.cpp $(CODEDIR)intersection/%.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 $(USEROBJ): $(OBJDIR)%.o: $(CODEDIR)interactive/%.cpp

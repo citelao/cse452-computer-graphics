@@ -9,6 +9,16 @@
 /* Begin PBXFileReference section */
 		7E442D0B1A92731000009426 /* Sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
 		7E442D0C1A92731000009426 /* Sphere.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
+		7E4742AE1ABFA03500DD82AC /* RayShape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RayShape.cpp; sourceTree = "<group>"; };
+		7E4742AF1ABFA03500DD82AC /* RayShape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RayShape.h; sourceTree = "<group>"; };
+		7E4742B01ABFA0DA00DD82AC /* RaySphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RaySphere.cpp; sourceTree = "<group>"; };
+		7E4742B11ABFA0DA00DD82AC /* RaySphere.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RaySphere.h; sourceTree = "<group>"; };
+		7E4742B21ABFB42C00DD82AC /* RayCylinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RayCylinder.cpp; sourceTree = "<group>"; };
+		7E4742B31ABFB42C00DD82AC /* RayCylinder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RayCylinder.h; sourceTree = "<group>"; };
+		7E4742B41ABFB46000DD82AC /* RayCone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RayCone.cpp; sourceTree = "<group>"; };
+		7E4742B51ABFB46000DD82AC /* RayCone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RayCone.h; sourceTree = "<group>"; };
+		7E4742B61ABFB47000DD82AC /* RayCube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RayCube.cpp; sourceTree = "<group>"; };
+		7E4742B71ABFB47000DD82AC /* RayCube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RayCube.h; sourceTree = "<group>"; };
 		7E4C02411A74272300AFF63E /* cse452shell */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = cse452shell; sourceTree = "<group>"; };
 		7E4C02441A74272300AFF63E /* BrushInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrushInterface.cpp; sourceTree = "<group>"; };
 		7E4C02451A74272300AFF63E /* BrushInterface.fl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BrushInterface.fl; sourceTree = "<group>"; };
@@ -53,7 +63,6 @@
 		7E4C026F1A74272300AFF63E /* IntersectionUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntersectionUI.cpp; sourceTree = "<group>"; };
 		7E4C02701A74272300AFF63E /* IntersectionUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntersectionUI.h; sourceTree = "<group>"; };
 		7E4C02711A74272300AFF63E /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		7E4C02721A74272300AFF63E /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		7E4C02731A74272300AFF63E /* Makefile.darwin */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.darwin; sourceTree = "<group>"; };
 		7E4C02741A74272300AFF63E /* Makefile.linux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.linux; sourceTree = "<group>"; };
 		7E4C02751A74272300AFF63E /* Makefile.ubuntu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.ubuntu; sourceTree = "<group>"; };
@@ -350,6 +359,21 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		7E4742AB1ABF9FE600DD82AC /* Primitives */ = {
+			isa = PBXGroup;
+			children = (
+				7E4742B01ABFA0DA00DD82AC /* RaySphere.cpp */,
+				7E4742B11ABFA0DA00DD82AC /* RaySphere.h */,
+				7E4742B21ABFB42C00DD82AC /* RayCylinder.cpp */,
+				7E4742B31ABFB42C00DD82AC /* RayCylinder.h */,
+				7E4742B41ABFB46000DD82AC /* RayCone.cpp */,
+				7E4742B51ABFB46000DD82AC /* RayCone.h */,
+				7E4742B61ABFB47000DD82AC /* RayCube.cpp */,
+				7E4742B71ABFB47000DD82AC /* RayCube.h */,
+			);
+			name = Primitives;
+			sourceTree = "<group>";
+		};
 		7E4C00D41A74252500AFF63E = {
 			isa = PBXGroup;
 			children = (
@@ -393,7 +417,6 @@
 				7E4C02611A74272300AFF63E /* interactive */,
 				7E4C026A1A74272300AFF63E /* intersection */,
 				7E4C02711A74272300AFF63E /* main.cpp */,
-				7E4C02721A74272300AFF63E /* Makefile */,
 				7E4C02731A74272300AFF63E /* Makefile.darwin */,
 				7E4C02741A74272300AFF63E /* Makefile.linux */,
 				7E4C02751A74272300AFF63E /* Makefile.ubuntu */,
@@ -458,6 +481,9 @@
 		7E4C026A1A74272300AFF63E /* intersection */ = {
 			isa = PBXGroup;
 			children = (
+				7E4742AE1ABFA03500DD82AC /* RayShape.cpp */,
+				7E4742AF1ABFA03500DD82AC /* RayShape.h */,
+				7E4742AB1ABF9FE600DD82AC /* Primitives */,
 				7E4C026B1A74272300AFF63E /* HitRecord.h */,
 				7E4C026C1A74272300AFF63E /* IntersectionInterface.cpp */,
 				7E4C026D1A74272300AFF63E /* IntersectionInterface.fl */,

@@ -25,7 +25,7 @@
 
 class Sphere : public Shape {
 public:
-    Sphere(int topdiv, int sidediv);
+    Sphere(int topdiv = 0, int sidediv = 5);
     void draw();
     
 private:

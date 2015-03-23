@@ -7,6 +7,16 @@
 #include "../UIInterface.h"
 #include <FL/Fl_Window.H>
 
+#include "RayShape.h"
+#include "RaySphere.h"
+#include "RayCylinder.h"
+#include "RayCone.h"
+#include "RayCube.h"
+#include "../shapes/Sphere.h"
+#include "../shapes/Cylinder.h"
+#include "../shapes/Cone.h"
+#include "../shapes/Cube.h"
+
 class IntersectionInterface;
 class IntersectionUI : public UIInterface {
 public:
@@ -31,6 +41,20 @@ private:
     void drawHits(HitRecord& hr);
 
     // declare your variables here
+    Shape *currentClassicShape;
+    RayShape *currentShape;
+    
+    Sphere *classicSphere;
+    RaySphere *sphere;
+    
+    Cylinder *classicCylinder;
+    RayCylinder *cylinder;
+    
+    Cone *classicCone;
+    RayCone *cone;
+    
+    Cube *classicCube;
+    RayCube *cube;
 };
 
 #endif /* _INTERSECTION_UI_H_ */
