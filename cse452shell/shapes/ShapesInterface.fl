@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0303 
 header_name {ShapesInterface.h} 
 code_name {ShapesInterface.cpp}
 class ShapesInterface {open
@@ -7,12 +7,12 @@ class ShapesInterface {open
   Function {make_window()} {open
   } {
     Fl_Window m_shapesWindow {
-      label {Shapes UI} open selected
+      label {Shapes UI} open
       xywh {600 275 395 145} type Double resizable
       code0 {\#include "ShapesUI.h"} visible
     } {
       Fl_Choice m_iShapeType {
-        label {Shape Type} open
+        label {Shape Type} open selected
         xywh {5 25 180 25} down_box BORDER_BOX align 5
       } {
         MenuItem {} {
@@ -34,6 +34,11 @@ class ShapesInterface {open
           label Cube
           callback {myShapes.changedShape();}
           xywh {30 30 100 20}
+        }
+        MenuItem {} {
+          label Cow
+          callback {myShapes.changedShape();}
+          xywh {0 0 31 20}
         }
       }
       Fl_Choice m_iDisplayType {
@@ -87,7 +92,8 @@ myShapes.setUI( this );
 myShapes.changedShape();
 myShapes.changedTessel();} {}
   }
-  decl {ShapesUI myShapes;} {}
+  decl {ShapesUI myShapes;} {private local
+  }
   Function {getShapeType() const} {open return_type {ShapesUI::ShapeType}
   } {
     code {return (ShapesUI::ShapeType) m_iShapeType->value();} {}

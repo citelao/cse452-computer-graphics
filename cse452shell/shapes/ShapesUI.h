@@ -12,6 +12,7 @@
 #include "Cylinder.h"
 #include "Cube.h"
 #include "Cone.h"
+#include "Raw.h"
 #include <FL/Fl_Window.H>
 
 class ShapesInterface;
@@ -29,7 +30,8 @@ public:
         SHAPE_SPHERE,
         SHAPE_CONE,
         SHAPE_CYLINDER,
-        SHAPE_CUBE
+        SHAPE_CUBE,
+        SHAPE_COW
     };
 
     enum DisplayType {

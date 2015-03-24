@@ -141,6 +141,11 @@ Shape* ShapesUI::change(ShapeType type, int tessel1, int tessel2) {
                 ret = new Cube(ct1, ct2);
                 break;
             }
+                
+            case SHAPE_COW: {
+                ret = new Raw(1, 1);
+                break;
+            }
         }
         
         cache(ret, type, tessel1, tessel2);
