@@ -27,7 +27,7 @@ HitRecord RayCone::intersect(Point3 p, Vector3 dir) const {
     // (v - (v*n)n)^2 - r^2(v*n)^2 = 0
     // => quadratic
     Vector3 alpha = dir - (dir * _n * _n);
-    Vector3 beta = (p - _tip) - ((p - _tip) * _n * _n);
+    Vector3 beta = p - _tip - (p - _tip) * _n * _n;
     double gamma = dir * _n;
     double delta = (p - _tip) * _n;
     
@@ -41,10 +41,10 @@ HitRecord RayCone::intersect(Point3 p, Vector3 dir) const {
     Point3 pbot = p + tbot * dir;
     bool pbotFits = sideConstraint(pbot) < 0;
     
-    Point3 ps1 = p - ts1 * dir;
+    Point3 ps1 = p + ts1 * dir;
     bool ps1Fits = botConstraint(ps1) > 0;
     
-    Point3 ps2 = p - ts2 * dir;
+    Point3 ps2 = p + ts2 * dir;
     bool ps2Fits = botConstraint(ps2) > 0;
     
     if (pbotFits) {
