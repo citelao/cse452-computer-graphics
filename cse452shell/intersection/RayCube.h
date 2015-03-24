@@ -23,6 +23,27 @@ public:
 private:
     Point3 _corner;
     Vector3 _dimensions;
+    
+    Point3 gTop;
+    Point3 gBot;
+    Point3 gLeft;
+    Point3 gRight;
+    Point3 gFront;
+    Point3 gBack;
+    
+    Vector3 nTop;
+    Vector3 nBot;
+    Vector3 nLeft;
+    Vector3 nRight;
+    Vector3 nFront;
+    Vector3 nBack;
+    
+    double topConstraint(Point3 p) const;
+    double botConstraint(Point3 p) const;
+    double rgtConstraint(Point3 p) const;
+    double lftConstraint(Point3 p) const;
+    double frtConstraint(Point3 p) const;
+    double bckConstraint(Point3 p) const;
 };
 
 #endif /* defined(__cse452shellXC__RayCube__) */

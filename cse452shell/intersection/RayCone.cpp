@@ -26,14 +26,14 @@ HitRecord RayCone::intersect(Point3 p, Vector3 dir) const {
     // v = p + td - tip
     // (v - (v*n)n)^2 - r^2(v*n)^2 = 0
     // => quadratic
-    Vector3 alpha = dir - dir * _n * _n;
-    Vector3 beta = (p - _tip) - (p - _tip) * _n * _n;
-    double gamma = _radius * _radius * dir * _n;
-    double delta = _radius * _radius * (p - _tip) * _n;
+    Vector3 alpha = dir - (dir * _n * _n);
+    Vector3 beta = (p - _tip) - ((p - _tip) * _n * _n);
+    double gamma = dir * _n;
+    double delta = (p - _tip) * _n;
     
-    double a = alpha * alpha - gamma * gamma;
-    double b = 2 * alpha * beta - 2 * gamma * delta;
-    double c = beta * beta - delta * delta;
+    double a = alpha * alpha - _radius * _radius * gamma * gamma;
+    double b = 2 * alpha * beta - (2 * _radius * _radius * gamma * delta);
+    double c = beta * beta - (_radius * _radius * delta * delta);
     
     double ts1 = (-b + sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
     double ts2 = (-b - sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
@@ -52,7 +52,7 @@ HitRecord RayCone::intersect(Point3 p, Vector3 dir) const {
     }
     
 //    if (ps1Fits) {
-        hr.addHit(ts1, 0, 0, ps1, Vector3(0,0,0));
+        hr.addHit(ts1, 0, 0, ps1, Vector3(1,0,0));
 //    }
     
 //    if (ps2Fits) {
