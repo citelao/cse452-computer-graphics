@@ -15,14 +15,14 @@
 
 class RayCube : public RayShape {
 public:
-    RayCube(Point3 center = Point3(0,0,0), double radius = 0.5) :
-    _center(center), _radius(radius) {};
+    RayCube(Point3 corner = Point3(-0.5,-0.5,-0.5),
+            Vector3 dimensions = Vector3(1,1,1));
     
     HitRecord intersect(Point3 p, Vector3 dir) const;
     
 private:
-    Point3 _center;
-    double _radius;
+    Point3 _corner;
+    Vector3 _dimensions;
 };
 
 #endif /* defined(__cse452shellXC__RayCube__) */
