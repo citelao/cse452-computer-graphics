@@ -11,6 +11,27 @@
 RayCube::RayCube(Point3 corner, Vector3 dimensions) {
     _corner = corner;
     _dimensions = dimensions;
+    
+    // Top & Bot
+    gTop = _corner + Vector3(0, _dimensions[1], 0);
+    nTop = (gTop - _corner).unit();
+    
+    gBot = _corner;
+    nBot = -nTop;
+    
+    // Left & Right
+    gRight = _corner + Vector3(_dimensions[0], 0, 0);
+    nRight = (gRight - _corner).unit();
+    
+    gLeft = _corner;
+    nLeft = -nRight;
+    
+    // Front & Back
+    gFront = _corner + Vector3(0, 0, _dimensions[2]);
+    nFront = (gFront - _corner).unit();
+    
+    gBack = _corner;
+    nBack = -nFront;
 };
 
 HitRecord RayCube::intersect(Point3 p, Vector3 dir) const {
@@ -19,84 +40,99 @@ HitRecord RayCube::intersect(Point3 p, Vector3 dir) const {
     // Take a planar approach
     
     // Top plane
-    Point3 topg = _corner + Vector3(0, _dimensions[1], 0);
-    Vector3 topn = (topg - _corner).unit();
-    double ttop = (topg - p) * topn / (dir * topn);
+    double ttop = (gTop - p) * nTop / (dir * nTop);
+    // Bot plane
+    double tbot = (gBot - p) * nBot / (dir * nBot);
+    // Right plane
+    double trgt = (gRight - p) * nRight / (dir * nRight);
+    // Left plane
+    double tlft = (gLeft - p) * nLeft / (dir * nLeft);
+    // Front plane
+    double tfrt = (gFront - p) * nFront / (dir * nFront);
+    // Back plane
+    double tbck = (gBack - p) * nBack / (dir * nBack);
     
     Point3 ptop = p + ttop * dir;
-//    bool ptopValid = (lftConstraint(ptop) > 0 &&
-//                      rgtConstraint(ptop) < 0 &&
-//                      bckConstraint(ptop) < 0 &&
-//                      frtConstraint(ptop) > 0);
-    
-    // Bot plane
-    Point3 botg = _corner;
-    Vector3 botn = -topn;
-    double tbot = (botg - p) * botn / (dir * botn);
+    bool ptopValid = (leftConstraint(ptop) < 0 &&
+                      rightConstraint(ptop) < 0 &&
+                      backConstraint(ptop) < 0 &&
+                      frontConstraint(ptop) < 0);
     
     Point3 pbot = p + tbot * dir;
-    
-    // Right plane
-    Point3 rgtg = _corner + Vector3(_dimensions[0], 0, 0);
-    Vector3 rgtn = (rgtg - _corner).unit();
-    double trgt = (rgtg - p) * rgtn / (dir * rgtn);
+    bool pbotValid = (leftConstraint(pbot) < 0 &&
+                      rightConstraint(pbot) < 0 &&
+                      backConstraint(pbot) < 0 &&
+                      frontConstraint(pbot) < 0);
     
     Point3 prgt = p + trgt * dir;
-    
-    // Left plane
-    Point3 lftg = _corner;
-    Vector3 lftn = -rgtn;
-    double tlft = (lftg - p) * lftn / (dir * lftn);
+    bool prgtValid = (topConstraint(prgt) < 0 &&
+                      botConstraint(prgt) < 0 &&
+                      backConstraint(prgt) < 0 &&
+                      frontConstraint(prgt) < 0);
     
     Point3 plft = p + tlft * dir;
-    
-    // Front plane
-    Point3 frtg = _corner + Vector3(0, 0, _dimensions[2]);
-    Vector3 frtn = (frtg - _corner).unit();
-    double tfrt = (frtg - p) * frtn / (dir * frtn);
+    bool plftValid = (topConstraint(plft) < 0 &&
+                      botConstraint(plft) < 0 &&
+                      backConstraint(plft) < 0 &&
+                      frontConstraint(plft) < 0);
     
     Point3 pfrt = p + tfrt * dir;
-    
-    // Back plane
-    Point3 bckg = _corner;
-    Vector3 bckn = -rgtn;
-    double tbck = (bckg - p) * bckn / (dir * bckn);
+    bool pfrtValid = (topConstraint(pfrt) < 0 &&
+                      botConstraint(pfrt) < 0 &&
+                      leftConstraint(pfrt) < 0 &&
+                      rightConstraint(pfrt) < 0);
     
     Point3 pbck = p + tbck * dir;
+    bool pbckValid = (topConstraint(pbck) < 0 &&
+                      botConstraint(pbck) < 0 &&
+                      leftConstraint(pbck) < 0 &&
+                      rightConstraint(pbck) < 0);
     
     
-    hr.addHit(ttop, 0, 0, ptop, topn);
-    hr.addHit(tbot, 0, 0, pbot, botn);
+    if (ptopValid) {
+        hr.addHit(ttop, 0, 0, ptop, nTop);
+    }
+    if (pbotValid) {
+        hr.addHit(tbot, 0, 0, pbot, nBot);
+    }
     
-    hr.addHit(trgt, 0, 0, prgt, rgtn);
-    hr.addHit(tlft, 0, 0, plft, lftn);
+    if (prgtValid) {
+        hr.addHit(trgt, 0, 0, prgt, nRight);
+    }
+    if (plftValid) {
+        hr.addHit(tlft, 0, 0, plft, nLeft);
+    }
     
-    hr.addHit(tfrt, 0, 0, pfrt, frtn);
-    hr.addHit(tbck, 0, 0, pbck, bckn);
+    if (pfrtValid) {
+        hr.addHit(tfrt, 0, 0, pfrt, nFront);
+    }
+    if (pbckValid) {
+        hr.addHit(tbck, 0, 0, pbck, nBack);
+    }
     
     return hr;
 };
 
-double topConstraint(Point3 p) const {
-    
+double RayCube::topConstraint(Point3 p) const {
+    return (p - gTop) * nTop;
 };
 
-double botConstraint(Point3 p) const {
-    
+double RayCube::botConstraint(Point3 p) const {
+    return (p - gBot) * nBot;
 };
 
-double rgtConstraint(Point3 p) const {
-    return (p - g) * n;
+double RayCube::rightConstraint(Point3 p) const {
+    return (p - gRight) * nRight;
 };
 
-double lftConstraint(Point3 p) const {
-    
+double RayCube::leftConstraint(Point3 p) const {
+    return (p - gLeft) * nLeft;
 };
 
-double frtConstraint(Point3 p) const {
-    
+double RayCube::frontConstraint(Point3 p) const {
+    return (p - gFront) * nFront;
 };
 
-double bckConstraint(Point3 p) const {
-    
+double RayCube::backConstraint(Point3 p) const {
+    return (p - gBack) * nBack;
 };

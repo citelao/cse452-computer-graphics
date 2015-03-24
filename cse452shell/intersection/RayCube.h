@@ -40,10 +40,10 @@ private:
     
     double topConstraint(Point3 p) const;
     double botConstraint(Point3 p) const;
-    double rgtConstraint(Point3 p) const;
-    double lftConstraint(Point3 p) const;
-    double frtConstraint(Point3 p) const;
-    double bckConstraint(Point3 p) const;
+    double rightConstraint(Point3 p) const;
+    double leftConstraint(Point3 p) const;
+    double frontConstraint(Point3 p) const;
+    double backConstraint(Point3 p) const;
 };
 
 #endif /* defined(__cse452shellXC__RayCube__) */
