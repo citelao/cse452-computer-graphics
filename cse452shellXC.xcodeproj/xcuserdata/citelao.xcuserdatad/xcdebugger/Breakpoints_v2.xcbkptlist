@@ -42,22 +42,6 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "cse452shell/intersection/RayCone.cpp"
-            timestampString = "448865175.713438"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "RayCone::intersect(Point3 p, Vector3 dir)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "cse452shell/intersection/RayCone.cpp"
             timestampString = "448865503.095679"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"

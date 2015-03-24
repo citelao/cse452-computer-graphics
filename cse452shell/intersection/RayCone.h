@@ -24,7 +24,8 @@ private:
     Vector3 _n;
     double _radius;
     double _height;
-    
+
+    double topConstraint(Point3 p) const;
     double botConstraint(Point3 p) const;
     double sideConstraint(Point3 p) const;
 };

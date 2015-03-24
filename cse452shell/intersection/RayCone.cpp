@@ -42,28 +42,32 @@ HitRecord RayCone::intersect(Point3 p, Vector3 dir) const {
     bool pbotFits = sideConstraint(pbot) < 0;
     
     Point3 ps1 = p + ts1 * dir;
-    bool ps1Fits = botConstraint(ps1) > 0;
+    bool ps1Fits = botConstraint(ps1) > 0 && topConstraint(ps1) < 0;
     
     Point3 ps2 = p + ts2 * dir;
-    bool ps2Fits = botConstraint(ps2) > 0;
+    bool ps2Fits = botConstraint(ps2) > 0 && topConstraint(ps2) < 0;
     
     if (pbotFits) {
         hr.addHit(tbot, 0, 0, pbot, -_n);
     }
     
-//    if (ps1Fits) {
-        hr.addHit(ts1, 0, 0, ps1, Vector3(1,0,0));
-//    }
+    if (ps1Fits) {
+        hr.addHit(ts1, 0, 0, ps1, ((ps1 - _tip) ^ (_height * _n) ^ (ps1 - _tip)).unit());
+    }
     
-//    if (ps2Fits) {
-        hr.addHit(ts2, 0, 0, ps2, Vector3(0,0,0));
-//    }
+    if (ps2Fits) {
+        hr.addHit(ts2, 0, 0, ps2, ((ps2 - _tip) ^ (_height * _n) ^ (ps2 - _tip)).unit());
+    }
     
     return hr;
 };
 
+double RayCone::topConstraint(Point3 p) const {
+    return (p - _tip) * _n;
+};
+
 double RayCone::botConstraint(Point3 p) const {
-    return (p - _tip - _height * _n) * _n;
+    return (p - _tip + _height * _n) * _n;
 };
 
 double RayCone::sideConstraint(Point3 p) const {
