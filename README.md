@@ -13,6 +13,10 @@ Program may be accessed in the `product/` directory.
 
 Program may be built using the `.vcxproj`.
 
+## Intersections
+
+Added abstract `RayShape` and concrete Ray shapes for all required primitives.
+
 ## Camera
 
 ### Additions
