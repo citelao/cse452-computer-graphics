@@ -20,14 +20,18 @@ BRUSHOBJ = $(OBJDIR)MyBrush_UI.o $(OBJDIR)MyBrush.o  $(OBJDIR)BrushInterface.o
 # SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o
 SHAPESOBJ = $(OBJDIR)ShapesInterface.o $(OBJDIR)ShapesUI.o $(OBJDIR)Shape.o $(OBJDIR)Cylinder.o $(OBJDIR)Cube.o $(OBJDIR)Cone.o $(OBJDIR)Sphere.o $(OBJDIR)Raw.o
 CAMERAOBJ = $(OBJDIR)CameraInterface.o $(OBJDIR)CameraUI.o $(OBJDIR)IBar.o $(OBJDIR)Camera.o
-SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)MyScene_draw.o 
+# This has been updated to add my own tree classes.
+# Also, split sceneobj into header and non-header
+#SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)MyScene_draw.o
+SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)Object.o $(OBJDIR)Node.o $(OBJDIR)Tree.o
+NOHSCENEOBJ = $(OBJDIR)MyScene_draw.o
 # This has been updated to add my own shapes code
 # INTERSECTOBJ  = $(OBJDIR)IntersectionInterface.o $(OBJDIR)IntersectionUI.o
 INTERSECTOBJ  = $(OBJDIR)IntersectionInterface.o $(OBJDIR)IntersectionUI.o $(OBJDIR)RayShape.o $(OBJDIR)RaySphere.o $(OBJDIR)RayCylinder.o $(OBJDIR)RayCone.o $(OBJDIR)RayCube.o
 USEROBJ =  $(OBJDIR)InteractiveInterface.o $(OBJDIR)InteractiveUI.o $(OBJDIR)InteractiveWidget.o $(OBJDIR)MyScene_select.o 
 RENDEROBJ = $(OBJDIR)MyScene_render.o $(OBJDIR)RenderingUI.o $(OBJDIR)RenderingInterface.o
 
-OBJ = $(MAINOBJ) $(VECMATHOBJ) $(RENDEROBJ)  $(USEROBJ)  $(SCENEOBJ) $(INTERSECTOBJ) $(SHAPESOBJ) $(CAMERAOBJ) $(BRUSHOBJ)
+OBJ = $(MAINOBJ) $(VECMATHOBJ) $(RENDEROBJ)  $(USEROBJ) $(NOHSCENEOBJ) $(SCENEOBJ) $(INTERSECTOBJ) $(SHAPESOBJ) $(CAMERAOBJ) $(BRUSHOBJ)
 
 #LIBS =  -L$(GLDIR) -L$(FLTKLIBDIR) -lfltk -lfltk_gl -lfltk_images -lfltk_forms -lfltk_jpeg -lGLU -lGL -lpng
 LIBS =  -L$(GLDIR) -L$(FLTKLIBDIR) -lfltk -lfltk_gl -lfltk_images -lfltk_forms -lGLU -lGL -lpng
@@ -62,7 +66,10 @@ $(SHAPESOBJ): $(OBJDIR)%.o: $(CODEDIR)shapes/%.cpp $(CODEDIR)shapes/%.h
 $(CAMERAOBJ): $(OBJDIR)%.o: $(CODEDIR)camera/%.cpp $(CODEDIR)camera/%.h
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(SCENEOBJ): $(OBJDIR)%.o: $(CODEDIR)sceneview/%.cpp
+$(SCENEOBJ): $(OBJDIR)%.o: $(CODEDIR)sceneview/%.cpp $(CODEDIR)sceneview/%.h
+	$(CXX) -c $(CXXFLAGS) $< -o $@
+
+$(NOHSCENEOBJ): $(OBJDIR)%.o: $(CODEDIR)sceneview/%.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 $(INTERSECTOBJ): $(OBJDIR)%.o: $(CODEDIR)intersection/%.cpp $(CODEDIR)intersection/%.h

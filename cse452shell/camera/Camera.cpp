@@ -145,10 +145,9 @@ void Camera::initialize(std::vector<std::string> changed) {
         std::find(changed.begin(), changed.end(), "_rinv") != changed.end() ||
         std::find(changed.begin(), changed.end(), "_tinv") != changed.end()) {
         
-        _wtc = _sxy * _r * _t;
-        _ctw = _tinv * _rinv * _sxyinv;
+        _wtc =  _r * _t;
+        _ctw = _tinv * _rinv * _sxyinv * _sxyzinv;
         
-        assert(Matrix4::identity().approxEqual(_wtc * _ctw));
         
         changed.push_back("_wtc");
         changed.push_back("_ctw");
@@ -156,9 +155,9 @@ void Camera::initialize(std::vector<std::string> changed) {
     
     if (std::find(changed.begin(), changed.end(), "_sxyz") != changed.end() ||
         std::find(changed.begin(), changed.end(), "_d") != changed.end()) {
-        _proj = _d * _sxyz;
-        _projinv = _sxyzinv * _dinv;
-//
+        _proj = _d * _sxyz * _sxy;
+        _projinv = _dinv;
+
 //        _proj = Matrix4(Vector4(1, 0, 0, 0),
 //                        Vector4(0, 1, 0, 0),
 //                        Vector4(0, 0, - 2 / _far, - (_near + _far) / (_far - _near)),
@@ -251,9 +250,14 @@ Point3 Camera::getEye()  const{
     return _from;
 }
 
+// WHAT THE FUCK IS THIS NAME
+// ZOOM DOESN'T MEAN FOV
+// WHAT ARE YOU TALKING ABOUT
+// GO HOME CODE YOU'RE INCORRECTLY NAMED
 double Camera::getZoom() const
 {
-    return _width / 2 / tan(_fov / 2);
+//    return _width / 2 / tan(_fov / 2);
+    return _fov;
 }
 
 void Camera::setFrom(const Point3& from) {
@@ -289,7 +293,7 @@ void Camera::setWidthHeight(int w, int h) {
 
 void Camera::setZoom(double z) {
     // set field of view (specified in degrees)
-    _fov = atan(_width / 2 / z);
+    _fov = z * 3.141592654 / 180;
     initialize({"_fov"});
 }
 

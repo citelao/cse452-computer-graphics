@@ -10,6 +10,10 @@
 #include <string>
 #include <vector>
 
+#include "Object.h"
+#include "Node.h"
+#include "Tree.h"
+
 /*
  * This class holds all of the data in the scene file.
  *  Camera
@@ -17,11 +21,6 @@
  *  Subgraphs
  *  Root subgraph
  */
-
-// ToDo: Define these
-class Object;
-class Node;
-class Tree;
 
 class MyScene {
 public:

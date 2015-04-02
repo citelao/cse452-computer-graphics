@@ -358,6 +358,12 @@
 		7EA2FD1E1A918A9200A947B6 /* Cone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cone.h; sourceTree = "<group>"; };
 		7EA437FC1AC203D100B31FAA /* Raw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Raw.cpp; sourceTree = "<group>"; };
 		7EA437FD1AC203D100B31FAA /* Raw.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Raw.h; sourceTree = "<group>"; };
+		7EBF2A6C1ACCB6990088DDF2 /* Object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
+		7EBF2A6D1ACCB6990088DDF2 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		7EBF2A6E1ACCB6A70088DDF2 /* Node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
+		7EBF2A6F1ACCB6A70088DDF2 /* Node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
+		7EBF2A701ACCB6B50088DDF2 /* Tree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Tree.cpp; sourceTree = "<group>"; };
+		7EBF2A711ACCB6B50088DDF2 /* Tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -522,6 +528,12 @@
 				7E4C02861A74272300AFF63E /* SceneviewInterface.h */,
 				7E4C02871A74272300AFF63E /* SceneviewUI.cpp */,
 				7E4C02881A74272300AFF63E /* SceneviewUI.h */,
+				7EBF2A6C1ACCB6990088DDF2 /* Object.cpp */,
+				7EBF2A6D1ACCB6990088DDF2 /* Object.h */,
+				7EBF2A6E1ACCB6A70088DDF2 /* Node.cpp */,
+				7EBF2A6F1ACCB6A70088DDF2 /* Node.h */,
+				7EBF2A701ACCB6B50088DDF2 /* Tree.cpp */,
+				7EBF2A711ACCB6B50088DDF2 /* Tree.h */,
 			);
 			path = sceneview;
 			sourceTree = "<group>";
