@@ -7,3 +7,13 @@
 //
 
 #include "Tree.h"
+
+void Tree::addNode(Node* node) {
+    nodes.push_back(node);
+};
+
+void Tree::draw() const {
+    for (auto n : nodes) {
+        n->draw();
+    }
+};

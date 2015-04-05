@@ -11,6 +11,26 @@
 
 #include <stdio.h>
 
-class Object;
+#include "IDrawable.h"
+#include "../shapes/Shape.h"
+
+class Object : public IDrawable {
+    public:
+        Object()
+        : _valid(false) {};
+        Object(Shape* shape)
+        : _shape(shape), _valid(true) {};
+    
+        ~Object();
+    
+        bool isValid() const;
+        Object* setShape(Shape* shape);
+    
+        void draw() const;
+    
+    private:
+        bool _valid = false;
+        const Shape* _shape;
+};
 
 #endif /* defined(__cse452shellXC__Object__) */

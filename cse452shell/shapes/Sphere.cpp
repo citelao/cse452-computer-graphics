@@ -110,7 +110,7 @@ void Sphere::subdiv(Vector3 a, Vector3 b, Vector3 c, int d) {
     subdiv(a, abprime, acprime, d - 1);
 };
 
-void Sphere::draw() {
+void Sphere::draw() const {
     glBegin(GL_TRIANGLES);
         for (auto pt : pts) {
             glNormal3d(pt[0],pt[1],pt[2]);

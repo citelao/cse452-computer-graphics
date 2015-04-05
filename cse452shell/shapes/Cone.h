@@ -26,7 +26,7 @@
 class Cone : public Shape {
 public:
     Cone(int topdiv = 10, int sidediv = 2);
-    void draw();
+    void draw() const;
     
 private:
     std::vector<std::vector<Vector3> > pts;

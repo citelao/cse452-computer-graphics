@@ -25,4 +25,5 @@ void MyScene::draw() {
     }
 
     // TODO: draw the rest of the scene here
+    root->draw();
 }

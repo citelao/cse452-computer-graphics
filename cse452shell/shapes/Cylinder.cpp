@@ -30,7 +30,7 @@ Cylinder::Cylinder(int topdiv, int sidediv) : sidediv(sidediv) {
     bot.push_back(Vector3(0.5 * sin(0), -0.5, 0.5 * cos(0)));
 };
 
-void Cylinder::draw() {
+void Cylinder::draw() const {
     // Top circle
     glBegin(GL_TRIANGLE_FAN);
         for(auto pt : top) {

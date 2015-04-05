@@ -26,7 +26,7 @@
 class Cube : public Shape {
 public:
     Cube(int topdiv = 2, int sidediv = 0);
-    void draw();
+    void draw() const;
     
 private:
     void subdivide(Vector3 tl, Vector3 tr, Vector3 bl, Vector3 br, Vector3 norm, int depth);

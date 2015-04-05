@@ -34,7 +34,7 @@ public:
     
     ~Raw();
     
-    void draw();
+    void draw() const;
     
 private:
     std::vector<Vector3*> pts;

@@ -13,7 +13,7 @@
 
 class Shape {
     public:
-        virtual void draw() = 0;
+        virtual void draw() const = 0;
 };
 
 #endif /* defined(__cse452shellXC__Shape__) */

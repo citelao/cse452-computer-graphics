@@ -10,7 +10,22 @@
 #define __cse452shellXC__Tree__
 
 #include <stdio.h>
+#include <vector>
 
-class Tree;
+#include "IDrawable.h"
+#include "Node.h"
+
+class Tree : public IDrawable {
+    public:
+        Tree() : nodes(std::vector<Node*>()) {};
+    
+        void addNode(Node* node);
+        bool isValid() const { return true; };
+    
+        void draw() const;
+    
+    private:
+        std::vector<Node*> nodes;
+};
 
 #endif /* defined(__cse452shellXC__Tree__) */

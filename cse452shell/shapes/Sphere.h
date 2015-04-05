@@ -26,7 +26,7 @@
 class Sphere : public Shape {
 public:
     Sphere(int topdiv = 0, int sidediv = 5);
-    void draw();
+    void draw() const;
     
 private:
     void subdiv(Vector3 a, Vector3 b, Vector3 c, int d);

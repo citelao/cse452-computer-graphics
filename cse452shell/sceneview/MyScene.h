@@ -9,10 +9,20 @@
 #include <FL/Fl_Image.H>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "Object.h"
 #include "Node.h"
 #include "Tree.h"
+
+#include "Translate.h"
+#include "Rotate.h"
+#include "Scale.h"
+
+#include "../shapes/Cube.h"
+#include "../shapes/Cylinder.h"
+#include "../shapes/Cone.h"
+#include "../shapes/Sphere.h"
 
 /*
  * This class holds all of the data in the scene file.
@@ -117,6 +127,8 @@ private:
     std::vector<Light> lights;
 
     // your functions/variables go here
+    Tree* root;
+    std::unordered_map<std::string, Tree*> subgraphs;
 };
 
 #endif /* _MY_SCENE_H_ */

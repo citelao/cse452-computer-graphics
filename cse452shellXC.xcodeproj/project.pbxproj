@@ -364,6 +364,16 @@
 		7EBF2A6F1ACCB6A70088DDF2 /* Node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		7EBF2A701ACCB6B50088DDF2 /* Tree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Tree.cpp; sourceTree = "<group>"; };
 		7EBF2A711ACCB6B50088DDF2 /* Tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
+		7EBF2A721ACCD4EA0088DDF2 /* IDrawable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IDrawable.cpp; sourceTree = "<group>"; };
+		7EBF2A731ACCD4EA0088DDF2 /* IDrawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDrawable.h; sourceTree = "<group>"; };
+		7EEB76131AD1D7B80020161B /* ITransform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ITransform.cpp; sourceTree = "<group>"; };
+		7EEB76141AD1D7B80020161B /* ITransform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITransform.h; sourceTree = "<group>"; };
+		7EEB76151AD1D7FC0020161B /* Translate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Translate.cpp; sourceTree = "<group>"; };
+		7EEB76161AD1D7FC0020161B /* Translate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Translate.h; sourceTree = "<group>"; };
+		7EEB76171AD1E4E10020161B /* Rotate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Rotate.cpp; sourceTree = "<group>"; };
+		7EEB76181AD1E4E10020161B /* Rotate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rotate.h; sourceTree = "<group>"; };
+		7EEB76191AD1E6F50020161B /* Scale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scale.cpp; sourceTree = "<group>"; };
+		7EEB761A1AD1E6F50020161B /* Scale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scale.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -518,6 +528,7 @@
 		7E4C027E1A74272300AFF63E /* sceneview */ = {
 			isa = PBXGroup;
 			children = (
+				7EEB76121AD1D7AB0020161B /* Transforms */,
 				7E4C027F1A74272300AFF63E /* Light.h */,
 				7E4C02801A74272300AFF63E /* MyScene.cpp */,
 				7E4C02811A74272300AFF63E /* MyScene.h */,
@@ -528,12 +539,16 @@
 				7E4C02861A74272300AFF63E /* SceneviewInterface.h */,
 				7E4C02871A74272300AFF63E /* SceneviewUI.cpp */,
 				7E4C02881A74272300AFF63E /* SceneviewUI.h */,
+				7EBF2A721ACCD4EA0088DDF2 /* IDrawable.cpp */,
+				7EBF2A731ACCD4EA0088DDF2 /* IDrawable.h */,
 				7EBF2A6C1ACCB6990088DDF2 /* Object.cpp */,
 				7EBF2A6D1ACCB6990088DDF2 /* Object.h */,
 				7EBF2A6E1ACCB6A70088DDF2 /* Node.cpp */,
 				7EBF2A6F1ACCB6A70088DDF2 /* Node.h */,
 				7EBF2A701ACCB6B50088DDF2 /* Tree.cpp */,
 				7EBF2A711ACCB6B50088DDF2 /* Tree.h */,
+				7EEB76131AD1D7B80020161B /* ITransform.cpp */,
+				7EEB76141AD1D7B80020161B /* ITransform.h */,
 			);
 			path = sceneview;
 			sourceTree = "<group>";
@@ -888,6 +903,19 @@
 				7EA437FD1AC203D100B31FAA /* Raw.h */,
 			);
 			name = ShapeTypes;
+			sourceTree = "<group>";
+		};
+		7EEB76121AD1D7AB0020161B /* Transforms */ = {
+			isa = PBXGroup;
+			children = (
+				7EEB76151AD1D7FC0020161B /* Translate.cpp */,
+				7EEB76161AD1D7FC0020161B /* Translate.h */,
+				7EEB76171AD1E4E10020161B /* Rotate.cpp */,
+				7EEB76181AD1E4E10020161B /* Rotate.h */,
+				7EEB76191AD1E6F50020161B /* Scale.cpp */,
+				7EEB761A1AD1E6F50020161B /* Scale.h */,
+			);
+			name = Transforms;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

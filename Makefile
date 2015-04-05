@@ -23,7 +23,7 @@ CAMERAOBJ = $(OBJDIR)CameraInterface.o $(OBJDIR)CameraUI.o $(OBJDIR)IBar.o $(OBJ
 # This has been updated to add my own tree classes.
 # Also, split sceneobj into header and non-header
 #SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)MyScene_draw.o
-SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)Object.o $(OBJDIR)Node.o $(OBJDIR)Tree.o
+SCENEOBJ = $(OBJDIR)SceneviewInterface.o $(OBJDIR)SceneviewUI.o $(OBJDIR)MyScene.o $(OBJDIR)Object.o $(OBJDIR)Node.o $(OBJDIR)Tree.o $(OBJDIR)IDrawable.o $(OBJDIR)ITransform.o $(OBJDIR)Translate.o $(OBJDIR)Rotate.o $(OBJDIR)Scale.o
 NOHSCENEOBJ = $(OBJDIR)MyScene_draw.o
 # This has been updated to add my own shapes code
 # INTERSECTOBJ  = $(OBJDIR)IntersectionInterface.o $(OBJDIR)IntersectionUI.o

@@ -56,13 +56,16 @@ MyScene::MyScene() :
 ambientLight(0,0,0)
 {
     // initialize your variables here
-
+    
     //
     resetScene();
 }
 
 MyScene::~MyScene() {
     // destroy your variables here
+    for(auto kv : subgraphs) {
+        delete kv.second;
+    }
 }
 
 void MyScene::resetScene() {
@@ -82,6 +85,12 @@ void MyScene::resetScene() {
     ambientLight = Color(0,0,0);
 
     // reset your data here
+    if (!subgraphs.empty()) {
+        for(auto kv : subgraphs) {
+            delete kv.second;
+        }
+        subgraphs.erase(subgraphs.begin(), subgraphs.end());
+    }
 }
 
 bool MyScene::loadSceneFile(std::string filename) {
@@ -107,14 +116,16 @@ bool MyScene::loadSceneFile(std::string filename) {
             done = true;
         }
     } while (!done);
-    // ToDo: check that there is a root mastersubgraph
-    // and that no errors occured while loading
+    if (subgraphs.empty() || subgraphs.find("root") == subgraphs.end()) {
+        errorMessage = "No root graph";
+    }
     isLoaded = errorMessage.length() == 0;
     if (isLoaded) {
         // perform any post-loading computations here
         // (such as flattening the tree or building
         // ray-acceleration structures)
-
+        root = subgraphs.find("root")->second;
+        
     } else if (errorMessage.length() == 0)
         errorMessage = "Unable to locate root mastersubgraph";
 
@@ -259,6 +270,8 @@ Tree* MyScene::parseMasterSubgraph(Parser& p) {
     p.nextToken();
     std::string name = p.getToken();
 
+    Tree* subg = new Tree();
+    
     do {
         p.nextToken();
         if (p.getToken() == TOKEN_OB) {
@@ -266,22 +279,31 @@ Tree* MyScene::parseMasterSubgraph(Parser& p) {
             break;
         } else if (p.getToken() == TOKEN_TRANS) {
             // parse node and add it to the tree
-            // call parseTrans(p);
-
+            Node* node = parseTrans(p);
+            
+            if(node->isValid()) {
+                subg->addNode(node);
+            }
         } else {
             errorMessage = "Unrecognized token in mastersubgraph \"" + name + "\": \"" + p.getToken() + "\"";
             return 0;
         }
     } while (true);
 
-    // add the new master subgraph to the master subgraph list
-
-    // ToDo: Fix this
-    return NULL;}
+    if(!subg->isValid()) {
+        return nullptr;
+    }
+    
+    subgraphs.emplace(name, subg);
+    
+    return subg;
+}
 
 Node* MyScene::parseTrans(Parser& p) {
     // parse a trans block node
 
+    Node* node = new Node();
+    
     do {
         p.nextToken();
         if (p.getToken() == TOKEN_OB) {
@@ -292,23 +314,26 @@ Node* MyScene::parseTrans(Parser& p) {
             p.nextToken(); axis[0] = p.getValue();
             p.nextToken(); axis[1] = p.getValue();
             p.nextToken(); axis[2] = p.getValue();
-            p.nextToken(); double angle = p.getValue() * M_PI / 180.0;
-            // ToDo: add a rotation to the matrix stack here
+            p.nextToken(); double angle = p.getValue();
+            
+            node->addTransform(new Rotate(angle, axis));
 
         } else if (p.getToken() == TOKEN_TRANSLATE) {
             Vector3 v;
             p.nextToken(); v[0] = p.getValue();
             p.nextToken(); v[1] = p.getValue();
             p.nextToken(); v[2] = p.getValue();
-            // ToDo: add a translation to the matrix stack here
+            
+            node->addTransform(new Translate(v));
 
         } else if (p.getToken() == TOKEN_SCALE) {
             Vector3 v;
             p.nextToken(); v[0] = p.getValue();
             p.nextToken(); v[1] = p.getValue();
             p.nextToken(); v[2] = p.getValue();
-            // ToDo:add a scale to the matrix stack here
-
+       
+            node->addTransform(new Scale(v));
+            
         } else if (p.getToken() == TOKEN_MATRIXRC) {
             Vector4 r0, r1, r2, r3;
             p.nextToken(); r0[0] = p.getValue();
@@ -356,41 +381,50 @@ Node* MyScene::parseTrans(Parser& p) {
             // ToDo: add the arbitrary matrix to the matrix stack here
 
         } else if (p.getToken() == TOKEN_OBJECT) {
-            // ToDo: parse the object and add it to the node
-
-            // call parseObject(p) here;
-
+            Object* obj = parseObject(p);
+            if (obj->isValid()) {
+                node->setChild(obj);
+            }
         } else if (p.getToken() == TOKEN_SUBGRAPH) {
-            // ToDo: find the subgraph and add it to the current node
             p.nextToken();
             std::string subgraphName = p.getToken();
-
+            auto found = subgraphs.find(subgraphName);
+            if (found == subgraphs.end()) {
+                errorMessage = "Could not find subraph " + subgraphName + " for node.";
+                delete node;
+                return nullptr;
+            }
+                
+            node->setChild(found->second);
         } else {
             errorMessage = "Unrecognized token in trans block: \"" + p.getToken() + "\"";
-            // ToDo: Clean up
-            return 0;
+            delete node;
+            return nullptr;
         }
     } while (true);
 
-    // ToDo: Fix this
-    return NULL;
+    return node;
 }
 
 Object* MyScene::parseObject(Parser& p) {
-    // ToDo: parse an object block
+    Object* obj = new Object();
 
     p.nextToken();
     if (p.getToken() == TOKEN_CUBE) {
-        // object is a cube
+        Shape* shape = new Cube();
+        obj->setShape(shape);
 
     } else if (p.getToken() == TOKEN_CYLINDER) {
-        // object is a cylinder
+        Shape* shape = new Cylinder();
+        obj->setShape(shape);
 
     } else if (p.getToken() == TOKEN_CONE) {
-        // object is a cone
+        Shape* shape = new Cone();
+        obj->setShape(shape);
 
     } else if (p.getToken() == TOKEN_SPHERE) {
-        // object is a sphere
+        Shape* shape = new Sphere();
+        obj->setShape(shape);
 
     } else if (p.getToken() == TOKEN_COW) {
         // object is a cow (optional)
@@ -399,7 +433,8 @@ Object* MyScene::parseObject(Parser& p) {
 
     } else {
         errorMessage = "Unrecognized object type: \"" + p.getToken() + "\"";
-        return 0;
+        delete obj;
+        return nullptr;
     }
     do {
         p.nextToken();
@@ -469,12 +504,12 @@ Object* MyScene::parseObject(Parser& p) {
 
         } else {
             errorMessage = "Unrecognized token in object block: \"" + p.getToken() + "\"";
-            return 0;
+            delete obj;
+            return nullptr;
         }
     } while (true);
-
-    // ToDo: Fix this
-    return NULL;
+    
+    return obj;
 }
 
 std::string MyScene::getErrorMessage() const {

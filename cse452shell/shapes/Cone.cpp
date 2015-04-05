@@ -26,7 +26,7 @@ Cone::Cone(int topdiv, int sidediv) {
     
 };
 
-void Cone::draw() {
+void Cone::draw() const {
     glBegin(GL_TRIANGLES);
     auto v = pts[pts.size() - 1];
     for (size_t i = 0; i < v.size(); i++) {

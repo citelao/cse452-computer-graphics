@@ -26,7 +26,7 @@
 class Cylinder : public Shape {
     public:
         Cylinder(int topdiv = 10, int sidediv = 2);
-        void draw();
+        void draw() const;
     
     private:
         std::vector<Vector3> top;

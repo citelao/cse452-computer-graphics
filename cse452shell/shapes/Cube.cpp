@@ -69,7 +69,7 @@ void Cube::subdivide(Vector3 tl, Vector3 tr, Vector3 bl, Vector3 br, Vector3 nor
     subdivide(cm, cr, bm, br, norm, depth - 1);
 };
 
-void Cube::draw() {
+void Cube::draw() const {
     glBegin(GL_TRIANGLES);
         for(size_t i = 0; i < pts.size(); i++) {
             auto pt = pts[i];
