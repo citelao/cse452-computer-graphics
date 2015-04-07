@@ -23,6 +23,7 @@
 #include "../shapes/Cylinder.h"
 #include "../shapes/Cone.h"
 #include "../shapes/Sphere.h"
+#include "../shapes/Raw.h"
 
 /*
  * This class holds all of the data in the scene file.
@@ -129,6 +130,11 @@ private:
     // your functions/variables go here
     Tree* root;
     std::unordered_map<std::string, Tree*> subgraphs;
+    
+    Cube* cube = new Cube();
+    Cone* cone = new Cone();
+    Sphere* sphere = new Sphere();
+    Cylinder* cylinder = new Cylinder();
 };
 
 #endif /* _MY_SCENE_H_ */

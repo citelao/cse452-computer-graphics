@@ -30,8 +30,6 @@ class Object : public IDrawable {
         Object(Shape* shape)
         : _shape(shape), _valid(true) {};
     
-        ~Object();
-    
         bool isValid() const;
         Object* setShape(Shape* shape);
     
@@ -46,9 +44,9 @@ class Object : public IDrawable {
         GLfloat ior = 0.0;
         GLfloat shininess = 0.0;
     
-        std::string textureFile;
-        double textureU;
-        double textureV;
+        std::string textureFile = "";
+        double textureU = 0.0;
+        double textureV = 0.0;
     
     private:
         bool _valid = false;

@@ -8,12 +8,6 @@
 
 #include "Object.h"
 
-Object::~Object() {
-    if (_valid) {
-        delete _shape;
-    }
-}
-
 bool Object::isValid() const {
     return _valid;
 }

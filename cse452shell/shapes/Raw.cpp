@@ -50,7 +50,7 @@ void Raw::draw() const {
     glBegin(GL_TRIANGLES);
         for(size_t i = 0; i < pts.size(); i++) {
             auto pt = *pts[i];
-            auto norm = *normals[i / 3];
+            auto norm = *normals[(i / 3) - 1];
             glNormal3d(norm[0], norm[1], norm[2]);
             glVertex3d(pt[0], pt[1], pt[2]);
         }

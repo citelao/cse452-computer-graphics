@@ -41,6 +41,7 @@ const std::string TOKEN_CYLINDER       = "cylinder";
 const std::string TOKEN_CONE           = "cone";
 const std::string TOKEN_SPHERE         = "sphere";
 const std::string TOKEN_COW            = "cow";
+const std::string TOKEN_RAW            = "raw";
 const std::string TOKEN_AMBIENT        = "ambient";
 const std::string TOKEN_DIFFUSE        = "diffuse";
 const std::string TOKEN_SPECULAR       = "specular";
@@ -413,26 +414,35 @@ Object* MyScene::parseObject(Parser& p) {
 
     p.nextToken();
     if (p.getToken() == TOKEN_CUBE) {
-        Shape* shape = new Cube();
+        Shape* shape = cube;
         obj->setShape(shape);
 
     } else if (p.getToken() == TOKEN_CYLINDER) {
-        Shape* shape = new Cylinder();
+        Shape* shape = cylinder;
         obj->setShape(shape);
 
     } else if (p.getToken() == TOKEN_CONE) {
-        Shape* shape = new Cone();
+        Shape* shape = cone;
         obj->setShape(shape);
 
     } else if (p.getToken() == TOKEN_SPHERE) {
-        Shape* shape = new Sphere();
+        Shape* shape = sphere;
         obj->setShape(shape);
 
     } else if (p.getToken() == TOKEN_COW) {
         // object is a cow (optional)
         // you may ignore this, or replace it with a different placeholder
         // shape if you wish
-
+        Shape* shape = new Raw("../data/cow.raw");
+        obj->setShape(shape);
+        
+    } else if (p.getToken() == TOKEN_RAW) {
+        // `object raw filename`
+        std::string filename;
+        p.nextToken(); filename = p.getToken();
+        Shape* shape = new Raw(filename);
+        obj->setShape(shape);
+        
     } else {
         errorMessage = "Unrecognized object type: \"" + p.getToken() + "\"";
         delete obj;
