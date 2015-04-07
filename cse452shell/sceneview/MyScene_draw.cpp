@@ -23,7 +23,6 @@ void MyScene::draw() {
     for (unsigned int i = 0; i < lights.size(); i++) {
         lights[i].setOpenGLLight( GL_LIGHT0 + i );
     }
-
-    // TODO: draw the rest of the scene here
+    
     root->draw();
 }

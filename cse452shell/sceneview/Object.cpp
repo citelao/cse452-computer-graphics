@@ -24,6 +24,16 @@ Object* Object::setShape(Shape* shape) {
     return this;
 }
 
-void Object::draw() const {
+void Object::draw() const {   
+    glPushAttrib(GL_CURRENT_BIT);
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, &ambient[0]);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, &diffuse[0]);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, &specular[0]);
+    glMaterialfv(GL_FRONT, GL_EMISSION, &emission[0]);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    
+//    glColor3f(_color[0], _color[1], _color[2]);
     _shape->draw();
+    glPopAttrib();
 };

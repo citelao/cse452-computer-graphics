@@ -94,6 +94,7 @@ public:
     }
 private:
     GLfloat r, g, b;
+    GLfloat a = 1;
 };
 
 inline Color operator+(const Color& a, const Color& b) {

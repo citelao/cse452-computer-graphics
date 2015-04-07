@@ -7,6 +7,8 @@
 #include "cse452.h"
 #include "Matrix4.h"
 
+#define DEBUG false
+
 // you must implement all of the following methods
 
 class Camera {

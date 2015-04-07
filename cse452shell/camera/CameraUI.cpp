@@ -276,6 +276,10 @@ void CameraUI::print( ) {
     std::cout << camera.getProjection() << std::endl;
     std::cout << "World to Camera" << std::endl;
     std::cout << camera.getWorldToCamera() << std::endl;
+    
+    std::cout << "FOV: \t " << camera.getZoom() << std::endl;
+    std::cout << "Wth: \t " << camera.getWidth() << std::endl;
+    std::cout << "hgt: \t " << camera.getHeight() << std::endl;
     std::cout << "-----------------------------------------------" << std::endl << std::endl;
 }
 

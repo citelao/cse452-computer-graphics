@@ -165,6 +165,13 @@ void Camera::initialize(std::vector<std::string> changed) {
         
         changed.push_back("_proj");
     }
+    
+//    if(DEBUG) {
+//        std::cout << "change!" << std::endl;
+//        for (auto i : changed) {
+//            std::cout << "\t" << i << std::endl;
+//        }
+//    }
 }
 
 Camera::~Camera() {
@@ -262,30 +269,50 @@ double Camera::getZoom() const
 
 void Camera::setFrom(const Point3& from) {
     // set the current viewpoint (eye point)
+    if (DEBUG) {
+        std::cout << "setFrom" << std::endl;
+    }
+    
     _from = from;
     initialize({"_from"});
 }
 
 void Camera::setAt(const Point3& at) {
     // set the point the camera is looking at
+    if (DEBUG) {
+        std::cout << "setAt" << std::endl;
+    }
+    
     _look = at - _from;
     initialize({"_look"});
 }
 
 void Camera::setLook(const Vector3& l) {
     // set the direction the camera is looking at
+    if (DEBUG) {
+        std::cout << "setLook" << std::endl;
+    }
+    
     _look = l;
     initialize({"_look"});
 }
 
 void Camera::setUp(const Vector3& up) {
     // set the upwards direction of the camera
+    if (DEBUG) {
+        std::cout << "setUp" << std::endl;
+    }
+    
     _up = up;
     initialize({"_up"});
 }
 
 void Camera::setWidthHeight(int w, int h) {
     // set the current width and height of the film plane
+    if (DEBUG) {
+        std::cout << "setWidthHeight" << std::endl;
+    }
+    
     _width = w;
     _height = h;
     initialize({"_width", "_height"});
@@ -293,12 +320,20 @@ void Camera::setWidthHeight(int w, int h) {
 
 void Camera::setZoom(double z) {
     // set field of view (specified in degrees)
+    if (DEBUG) {
+        std::cout << "setZoom" << std::endl;
+    }
+    
     _fov = z * 3.141592654 / 180;
     initialize({"_fov"});
 }
 
 void Camera::setNearFar(double n, double f) {
     // set the near and far clipping planes
+    if (DEBUG) {
+        std::cout << "setNearFar" << std::endl;
+    }
+    
     _near = n;
     _far = f;
     initialize({"_near", "_far"});
@@ -306,12 +341,19 @@ void Camera::setNearFar(double n, double f) {
 
 void Camera::setSkew( double d )
 {
+    if (DEBUG) {
+        std::cout << "setSkew" << std::endl;
+    }
 }
 
 void Camera::setAspectRatioScale( double d )
 {
-    _height = (double)_width / d;
-    initialize({"_height"});
+    if (DEBUG) {
+        std::cout << "setAspectRatioScale" << std::endl;
+    }
+    
+//    _height = (double)_width / _fov * d;
+//    initialize({"_height"});
 }
 
 void Camera::setProjectionCenter( const Point3 &p )

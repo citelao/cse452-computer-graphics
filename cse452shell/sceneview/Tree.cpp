@@ -9,6 +9,10 @@
 #include "Tree.h"
 
 void Tree::addNode(Node* node) {
+    if(!node->isValid()) {
+        return;
+    }
+    
     nodes.push_back(node);
 };
 

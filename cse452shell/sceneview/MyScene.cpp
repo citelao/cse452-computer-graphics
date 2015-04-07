@@ -117,7 +117,9 @@ bool MyScene::loadSceneFile(std::string filename) {
         }
     } while (!done);
     if (subgraphs.empty() || subgraphs.find("root") == subgraphs.end()) {
-        errorMessage = "No root graph";
+        if(errorMessage == "") {
+            errorMessage = "No root graph";
+        }
     }
     isLoaded = errorMessage.length() == 0;
     if (isLoaded) {
@@ -281,7 +283,7 @@ Tree* MyScene::parseMasterSubgraph(Parser& p) {
             // parse node and add it to the tree
             Node* node = parseTrans(p);
             
-            if(node->isValid()) {
+            if(node != nullptr && node->isValid()) {
                 subg->addNode(node);
             }
         } else {
@@ -446,53 +448,52 @@ Object* MyScene::parseObject(Parser& p) {
             p.nextToken(); r = p.getValue();
             p.nextToken(); g = p.getValue();
             p.nextToken(); b = p.getValue();
-
-            // store ambient color here
-
+            obj->ambient = Color(r, g, b);
+            
         } else if (p.getToken() == TOKEN_DIFFUSE) {
             double r, g, b;
             p.nextToken(); r = p.getValue();
             p.nextToken(); g = p.getValue();
             p.nextToken(); b = p.getValue();
-            // store diffuse color here
-
+            obj->diffuse = Color(r, g, b);
+            
         } else if (p.getToken() == TOKEN_SPECULAR) {
             double r, g, b;
             p.nextToken(); r = p.getValue();
             p.nextToken(); g = p.getValue();
             p.nextToken(); b = p.getValue();
-            // store specular color here
+            obj->specular = Color(r, g, b);
 
         } else if (p.getToken() == TOKEN_REFLECT) {
             double r, g, b;
             p.nextToken(); r = p.getValue();
             p.nextToken(); g = p.getValue();
             p.nextToken(); b = p.getValue();
-            // store reflect color here
+            obj->reflect = Color(r, g, b);
 
         } else if (p.getToken() == TOKEN_TRANSPARENT) {
             double r, g, b;
             p.nextToken(); r = p.getValue();
             p.nextToken(); g = p.getValue();
             p.nextToken(); b = p.getValue();
-            // store transparent color here
-
+            obj->transparent = Color(r, g, b);
+            
         } else if (p.getToken() == TOKEN_EMIT) {
             double r, g, b;
             p.nextToken(); r = p.getValue();
             p.nextToken(); g = p.getValue();
             p.nextToken(); b = p.getValue();
-            // store emitted color here
+            obj->emission = Color(r, g, b);
 
         } else if (p.getToken() == TOKEN_SHINE) {
             double s;
             p.nextToken(); s = p.getValue();
-            // store shine here
+            obj->shininess = s;
 
         } else if (p.getToken() == TOKEN_IOR) {
             double ior;
             p.nextToken(); ior = p.getValue();
-            // store ior here
+            obj->ior = ior;
 
         } else if (p.getToken() == TOKEN_TEXTURE) {
             std::string filename;
@@ -500,8 +501,11 @@ Object* MyScene::parseObject(Parser& p) {
             p.nextToken(); filename = p.getToken();
             p.nextToken(); textureU = p.getValue();
             p.nextToken(); textureV = p.getValue();
-            // store texture information here
-
+            
+            obj->textureFile = filename;
+            obj->textureU = textureU;
+            obj->textureV = textureV;
+            
         } else {
             errorMessage = "Unrecognized token in object block: \"" + p.getToken() + "\"";
             delete obj;
