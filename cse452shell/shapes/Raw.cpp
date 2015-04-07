@@ -27,7 +27,7 @@ Raw::Raw(std::string filename) {
         pts.push_back(new Vector3(x, y, z));
     }
     
-    for (long i = 0; i < pts.size() / 3; i++) {
+    for (auto i = 0; i < pts.size() / 3; i++) {
         auto norm = (-(*pts[3*i] - *pts[3*i+2]) ^ (*pts[3*i] - *pts[3*i + 1])).unit();
         
         normals.push_back(new Vector3(norm[0], norm[1], norm[2]));

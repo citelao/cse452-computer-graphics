@@ -13,6 +13,12 @@ Program may be accessed in the `product/` directory.
 
 Program may be built using the `.vcxproj`.
 
+## Sceneview
+
+Added "raw" and "cow"
+
+"raw" followed by a filename will load a .raw file.
+
 ## Intersections
 
 Added abstract `RayShape` and concrete Ray shapes for all required primitives.
