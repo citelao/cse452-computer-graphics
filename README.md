@@ -15,6 +15,8 @@ Program may be built using the `.vcxproj`.
 
 ## Sceneview
 
+Created bs_person.sc.
+
 Added "raw" and "cow"
 
 "raw" followed by a filename will load a .raw file.

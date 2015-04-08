@@ -374,6 +374,7 @@
 		7EEB76181AD1E4E10020161B /* Rotate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rotate.h; sourceTree = "<group>"; };
 		7EEB76191AD1E6F50020161B /* Scale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scale.cpp; sourceTree = "<group>"; };
 		7EEB761A1AD1E6F50020161B /* Scale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scale.h; sourceTree = "<group>"; };
+		7EEFFB9A1AD4DF2D0078E98C /* bs_person.sc */ = {isa = PBXFileReference; lastKnownFileType = text; path = bs_person.sc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -432,6 +433,7 @@
 				7E4C025E1A74272300AFF63E /* cse452shell.vcproj */,
 				7E4C025F1A74272300AFF63E /* GLWindow.cpp */,
 				7E4C02601A74272300AFF63E /* GLWindow.h */,
+				7EEFFB991AD4DF2D0078E98C /* transfer */,
 				7E4C02611A74272300AFF63E /* interactive */,
 				7E4C026A1A74272300AFF63E /* intersection */,
 				7E4C02711A74272300AFF63E /* main.cpp */,
@@ -916,6 +918,14 @@
 				7EEB761A1AD1E6F50020161B /* Scale.h */,
 			);
 			name = Transforms;
+			sourceTree = "<group>";
+		};
+		7EEFFB991AD4DF2D0078E98C /* transfer */ = {
+			isa = PBXGroup;
+			children = (
+				7EEFFB9A1AD4DF2D0078E98C /* bs_person.sc */,
+			);
+			path = transfer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
