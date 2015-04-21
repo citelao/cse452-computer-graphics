@@ -56,3 +56,8 @@ void Raw::draw() const {
         }
     glEnd();
 };
+
+HitRecord Raw::intersect(Point3 p, Vector3 dir) const {
+    auto hr = HitRecord();
+    return hr;
+}

@@ -21,18 +21,22 @@
 #include <vector>
 #include <cmath>
 #include "Shape.h"
+#include "../intersection/HitRecord.h"
 #include "../vecmath/Vector3.h"
 
 class Sphere : public Shape {
 public:
     Sphere(int topdiv = 0, int sidediv = 5);
     void draw() const;
+    HitRecord intersect(Point3 p, Vector3 dir) const;
     
 private:
     void subdiv(Vector3 a, Vector3 b, Vector3 c, int d);
     
     std::vector<Vector3> pts;
+    
     double trueradius;
+    Point3 _center = Point3(0,0,0);
 };
 
 #endif /* defined(__cse452shellXC__Sphere__) */

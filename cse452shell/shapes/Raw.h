@@ -35,6 +35,7 @@ public:
     ~Raw();
     
     void draw() const;
+    HitRecord intersect(Point3 p, Vector3 dir) const;
     
 private:
     std::vector<Vector3*> pts;

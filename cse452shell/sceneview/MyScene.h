@@ -135,6 +135,13 @@ private:
     Cone* cone = new Cone();
     Sphere* sphere = new Sphere();
     Cylinder* cylinder = new Cylinder();
+    
+    // Rendering
+    bool stopRequested = false;
+    double progress = 0.0;
+    
+    Color cast(Point3 pt, Vector3 dir);
+    
 };
 
 #endif /* _MY_SCENE_H_ */

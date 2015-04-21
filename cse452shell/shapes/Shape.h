@@ -10,10 +10,12 @@
 #define __cse452shellXC__Shape__
 
 #include <stdio.h>
+#include "../intersection/HitRecord.h"
 
 class Shape {
     public:
         virtual void draw() const = 0;
+        virtual HitRecord intersect(Point3 p, Vector3 dir) const = 0;
 };
 
 #endif /* defined(__cse452shellXC__Shape__) */
