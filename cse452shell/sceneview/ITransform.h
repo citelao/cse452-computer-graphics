@@ -10,11 +10,13 @@
 #define __cse452shellXC__Transform__
 
 #include <stdio.h>
+#include "../vecmath/Matrix4.h"
 
 class ITransform {
     public:
 //        virtual ~ITransform() = 0;
         virtual void apply() = 0;
+        virtual Matrix4 matrix() = 0;
 };
 
 #endif /* defined(__cse452shellXC__Transform__) */

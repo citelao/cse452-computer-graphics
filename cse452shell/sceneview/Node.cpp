@@ -32,6 +32,9 @@ Node* Node::setChild(IDrawable* child) {
 Node* Node::addTransform(ITransform* t) {
     _transforms.push_back(t);
     
+    _matrix *= t->matrix();
+    _inv = _matrix.inverse();
+    
     return this;
 };
 
@@ -51,4 +54,11 @@ void Node::draw() const {
     _child->draw();
     
     glPopMatrix();
+}
+
+HitRecord Node::intersect(Point3 pt, Vector3 dir) const {
+    auto transformedpt = _inv * pt;
+    auto transformeddir = _inv * dir;
+    
+    return _child->intersect(transformedpt, transformeddir);
 }

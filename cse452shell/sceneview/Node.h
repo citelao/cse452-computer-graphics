@@ -26,9 +26,9 @@
 
 class Node : public IDrawable {
     public:
-        Node() : _valid(false) {};
+        Node() : _valid(false), _matrix(Matrix4::identity()) {};
         Node(IDrawable* child)
-        : _child(child), _valid(true) {};
+        : _child(child), _valid(true), _matrix(Matrix4::identity())  {};
     
         ~Node();
     
@@ -37,12 +37,15 @@ class Node : public IDrawable {
         bool isValid() const;
     
         void draw() const;
+        HitRecord intersect(Point3 pt, Vector3 dir) const;
     
     private:
         bool _valid = false;
         IDrawable* _child = nullptr;
     
         std::vector<ITransform*> _transforms;
+        Matrix4 _matrix;
+        Matrix4 _inv;
 };
 
 #endif /* defined(__cse452shellXC__Node__) */

@@ -28,6 +28,7 @@ class Rotate : public ITransform {
         : _angle(angle), _axis(axis) {};
     
         void apply();
+        Matrix4 matrix();
     
     private:
         Vector3 _axis;

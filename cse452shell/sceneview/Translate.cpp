@@ -11,3 +11,7 @@
 void Translate::apply() {
     glTranslated(_v[0], _v[1], _v[2]);
 }
+
+Matrix4 Translate::matrix() {
+    return Matrix4::translation(_v);
+}

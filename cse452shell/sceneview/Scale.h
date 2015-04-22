@@ -27,6 +27,7 @@ class Scale : public ITransform {
         Scale(Vector3 v) : _v(v) {};
     
         void apply();
+        Matrix4 matrix();
     
     private:
         Vector3 _v;

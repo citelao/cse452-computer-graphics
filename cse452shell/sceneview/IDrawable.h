@@ -10,6 +10,9 @@
 #define __cse452shellXC__IDrawable__
 
 #include <stdio.h>
+#include "../intersection/HitRecord.h"
+#include "../vecmath/Point3.h"
+#include "../vecmath/Vector3.h"
 
 class IDrawable {
     public:
@@ -17,6 +20,7 @@ class IDrawable {
     
         virtual bool isValid() const = 0;
         virtual void draw() const = 0;
+        virtual HitRecord intersect(Point3 pt, Vector3 dir) const = 0;
 };
 
 #endif /* defined(__cse452shellXC__IDrawable__) */

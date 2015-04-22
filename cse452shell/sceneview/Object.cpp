@@ -31,3 +31,7 @@ void Object::draw() const {
     _shape->draw();
     glPopAttrib();
 };
+
+HitRecord Object::intersect(Point3 pt, Vector3 dir) const {
+    return _shape->intersect(pt, dir);
+}

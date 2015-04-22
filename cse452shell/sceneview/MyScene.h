@@ -138,7 +138,7 @@ private:
     
     // Rendering
     bool stopRequested = false;
-    double progress = 0.0;
+    double progress = 1.0;
     
     Color cast(Point3 pt, Vector3 dir);
     

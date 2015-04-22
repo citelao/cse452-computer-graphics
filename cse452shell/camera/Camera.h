@@ -34,6 +34,7 @@ public:
     
     // Perspective plus scale (x,y, and z)
     Matrix4 getProjection() const;
+    Matrix4 getDInv() const;
 
     // Rotation and translation from world to camera
     Matrix4 getWorldToCamera() const;

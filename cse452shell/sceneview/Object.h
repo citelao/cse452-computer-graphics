@@ -34,6 +34,7 @@ class Object : public IDrawable {
         Object* setShape(Shape* shape);
     
         void draw() const;
+        HitRecord intersect(Point3 pt, Vector3 dir) const;
     
         Color ambient = Color(0.2, 0.2, 0.2);
         Color diffuse = Color(0.8, 0.8, 0.8);

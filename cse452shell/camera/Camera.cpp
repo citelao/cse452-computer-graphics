@@ -164,6 +164,8 @@ void Camera::initialize(std::vector<std::string> changed) {
 //                        Vector4(0, 0, 0, 1));
         
         changed.push_back("_proj");
+        
+        assert(Matrix4::identity().approxEqual(_d * _sxyz * _sxy * _r * _t * _tinv * _rinv * _sxyinv * _sxyzinv * _dinv));
     }
     
 //    if(DEBUG) {
@@ -217,6 +219,10 @@ Point3 Camera::getProjectionCenter() const
 Matrix4 Camera::getProjection() const {
     // return the current projection and scale matrix
     return _proj;
+}
+
+Matrix4 Camera::getDInv() const {
+    return _dinv;
 }
 
 Matrix4 Camera::getWorldToCamera() const {

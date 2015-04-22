@@ -28,6 +28,7 @@ class Translate : public ITransform {
 //        ~Translate() {};
     
         void apply();
+        Matrix4 matrix();
     
     private:
         Vector3 _v;
