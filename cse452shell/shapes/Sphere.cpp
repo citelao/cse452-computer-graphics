@@ -134,10 +134,6 @@ HitRecord Sphere::intersect(Point3 p, Vector3 dir) const {
     double t1 = (-b + sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
     double t2 = (-b - sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
     
-    if (t2 < 0) {
-        return hr;
-    }
-    
     Point3 p1 = p + t1 * dir;
     Point3 p2 = p + t2 * dir;
     

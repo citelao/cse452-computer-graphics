@@ -168,9 +168,11 @@ void IntersectionUI::draw() {
     currentClassicShape->draw();
     
     HitRecord hr = currentShape->intersect(pE1, dir);
+    std::cout << hr << std::endl;
     drawHits(hr);
     
     hr = currentShape->intersect(pE2, dir);
+    std::cout << hr << std::endl;
     drawHits(hr);
 
     endDrawing();

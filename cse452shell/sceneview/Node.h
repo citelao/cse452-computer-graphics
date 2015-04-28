@@ -37,7 +37,7 @@ class Node : public IDrawable {
         bool isValid() const;
     
         void draw() const;
-        HitRecord intersect(Point3 pt, Vector3 dir) const;
+        std::tuple<const Object*, HitRecord> intersect(Point3 pt, Vector3 dir) const;
     
     private:
         bool _valid = false;
@@ -46,6 +46,7 @@ class Node : public IDrawable {
         std::vector<ITransform*> _transforms;
         Matrix4 _matrix;
         Matrix4 _inv;
+        Matrix4 _invtranspose;
 };
 
 #endif /* defined(__cse452shellXC__Node__) */

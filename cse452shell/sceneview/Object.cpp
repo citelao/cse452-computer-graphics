@@ -32,6 +32,6 @@ void Object::draw() const {
     glPopAttrib();
 };
 
-HitRecord Object::intersect(Point3 pt, Vector3 dir) const {
-    return _shape->intersect(pt, dir);
+std::tuple<const Object*, HitRecord> Object::intersect(Point3 pt, Vector3 dir) const {
+    return std::make_tuple(this, _shape->intersect(pt, dir));
 }

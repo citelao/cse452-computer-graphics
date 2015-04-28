@@ -140,8 +140,9 @@ private:
     bool stopRequested = false;
     double progress = 1.0;
     
-    Color cast(Point3 pt, Vector3 dir);
+    const int MAX_BOUNCES = 3;
     
+    Color cast(Point3 pt, Vector3 dir, int iterations = 0);
 };
 
 #endif /* _MY_SCENE_H_ */

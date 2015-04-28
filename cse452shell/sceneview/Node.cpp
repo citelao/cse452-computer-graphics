@@ -34,6 +34,7 @@ Node* Node::addTransform(ITransform* t) {
     
     _matrix *= t->matrix();
     _inv = _matrix.inverse();
+    _invtranspose = _inv.transpose();
     
     return this;
 };
@@ -56,9 +57,32 @@ void Node::draw() const {
     glPopMatrix();
 }
 
-HitRecord Node::intersect(Point3 pt, Vector3 dir) const {
+std::tuple<const Object*, HitRecord>  Node::intersect(Point3 pt, Vector3 dir) const {
     auto transformedpt = _inv * pt;
     auto transformeddir = _inv * dir;
     
-    return _child->intersect(transformedpt, transformeddir);
+    auto tuple = _child->intersect(transformedpt, transformeddir);
+    
+    auto shape = std::get<0>(tuple);
+    auto hr = std::get<1>(tuple);
+    
+    auto newhr = HitRecord();
+    
+    double t, u, v;
+    Vector3 n;
+    Point3 p;
+    auto hit = hr.getFirstHit(t, u, v, p, n);
+    while (hit) {
+        Point3 transp = _matrix * p;
+        double transt = (transp - pt) * dir;
+        Vector3 transn = (_invtranspose * n).unit();
+        
+        newhr.addHit(transt, u, v, transp, transn);
+        hr.removeFirstHit();
+        hit = hr.getFirstHit(t, u, v, p, n);
+    }
+    
+    newhr.sortHits();
+
+    return std::make_tuple(shape, newhr);
 }

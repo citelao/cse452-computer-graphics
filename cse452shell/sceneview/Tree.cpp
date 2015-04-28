@@ -22,25 +22,36 @@ void Tree::draw() const {
     }
 };
 
-HitRecord Tree::intersect(Point3 pt, Vector3 dir) const {
+std::tuple<const Object*, HitRecord> Tree::intersect(Point3 pt, Vector3 dir) const {
     HitRecord nearestHr = HitRecord();
+    const Object* nearestShape = nullptr;
     double nearestT = std::numeric_limits<double>::infinity();
     for (auto n : nodes) {
-        auto currentHr = n->intersect(pt, dir);
+        auto tuple = n->intersect(pt, dir);
+        auto currentShape = std::get<0>(tuple);
+        auto currentHr = std::get<1>(tuple);
         currentHr.sortHits();
         double t, u, v;
         Point3 p;
         Vector3 norm;
         
-        if (!currentHr.getFirstHit(t, u, v, p, norm)) {
+        auto hit = currentHr.getFirstHit(t, u, v, p, norm);
+        
+        while(hit && t < 0.000000001) {
+            currentHr.removeFirstHit();
+            hit = currentHr.getFirstHit(t, u, v, p, norm);
+        }
+        
+        if (!hit) {
             continue;
         }
         
         if (t < nearestT) {
             nearestT = t;
             nearestHr = currentHr;
+            nearestShape = currentShape;
         }
     }
     
-    return nearestHr;
+    return std::make_tuple(nearestShape, nearestHr);
 };

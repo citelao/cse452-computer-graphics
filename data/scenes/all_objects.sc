@@ -7,7 +7,7 @@ near-far 8 15
 ]
 
 light [
-position 0 0 0
+position 0 1 3
 color 1 1 1
 ]
 

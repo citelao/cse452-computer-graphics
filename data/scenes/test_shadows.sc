@@ -100,7 +100,7 @@ mastersubgraph root [
 
   trans [
     scale 20 1 20
-    translate 0 -2.5 0
+    translate 0 -1 0
     object cube [
       diffuse 0.75 0.75 0.75
     ]

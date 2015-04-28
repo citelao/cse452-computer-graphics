@@ -374,17 +374,81 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
-            condition = "pt[0] == 0"
             continueAfterRunningActions = "No"
             filePath = "cse452shell/rendering/MyScene_render.cpp"
-            timestampString = "451355756.375722"
+            timestampString = "451872611.803629"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "MyScene::render(int type, int width, int height, unsigned char* pixels)"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "cse452shell/sceneview/Tree.cpp"
+            timestampString = "451868991.611647"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "Tree::intersect(Point3 pt, Vector3 dir)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "cse452shell/sceneview/Node.cpp"
+            timestampString = "451872229.429467"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "Node::intersect(Point3 pt, Vector3 dir)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "cse452shell/rendering/MyScene_render.cpp"
+            timestampString = "451873246.788661"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            condition = "shape-&gt;reflect.getMax() &gt; 0.0000001"
+            continueAfterRunningActions = "No"
+            filePath = "cse452shell/rendering/MyScene_render.cpp"
+            timestampString = "451876764.155494"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -23,7 +23,7 @@ class Tree : public IDrawable {
         bool isValid() const { return true; };
     
         void draw() const;
-        HitRecord intersect(Point3 pt, Vector3 dir) const;
+        std::tuple<const Object*, HitRecord> intersect(Point3 pt, Vector3 dir) const;
     
     private:
         std::vector<Node*> nodes;

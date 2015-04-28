@@ -63,7 +63,7 @@ mastersubgraph root [
     translate 1 0 1
     scale 1 3.8 1
     object sphere [
-      diffuse 0.1 0.1 0.1
+      diffuse 0.3 0.5 0.1
       reflect 0.9 0.9 0.9
       shine 30
       specular 1.0 1.0 1.0
