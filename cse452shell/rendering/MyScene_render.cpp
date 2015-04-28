@@ -45,7 +45,7 @@ void MyScene::render(int type, int width, int height, unsigned char* pixels) {
 }
 
 // Ah, the actual raycasting function!
-Color MyScene::cast(Point3 pt, Vector3 dir, int iterations) {
+Color MyScene::cast(Point3 pt, Vector3 dir, int iterations, Shape* currentShape, double ior) {
     // find the closest intersection
     double a, b, c;
     Vector3 normal;
@@ -78,17 +78,26 @@ Color MyScene::cast(Point3 pt, Vector3 dir, int iterations) {
             }
             
             if(!hit || (hitpt - castpt).lengthSquared() > (l.getPos() - castpt).lengthSquared()) {
+                // diffuse
                 auto falloffv = l.getFalloff();
                 auto distance = (l.getPos() - castpt).length();
                 auto falloff = 1.0 / (falloffv[0] + falloffv[1] * distance  + falloffv[2] * distance * distance);
-                auto mult = ((l.getPos() - castpt).unit() * (normal));
+                auto diffuseMult = ((l.getPos() - castpt).unit() * (normal));
                 
-                if(mult < 0) {
-                    std::cout << "neg mult " << t << " " << mult << std::endl;
-                    mult = 0;
+                if(diffuseMult < 0) {
+                    std::cout << "neg dif mult " << t << " " << diffuseMult << std::endl;
+                    diffuseMult = 0;
                 }
                 
-                diffuseColor += mult * falloff * l.getColor() * shape->diffuse;
+                diffuseColor += falloff * diffuseMult * l.getColor() * shape->diffuse;
+                
+                // reflect
+                auto lightRay = (l.getPos() - castpt).unit();
+                auto viewRay = (pt - castpt).unit();
+                auto reflectRay = (2 * (lightRay * normal.unit()) * normal.unit() - lightRay).unit();
+                auto specMult = pow(reflectRay * viewRay, shape->shininess);
+                
+                specColor += falloff * specMult * l.getColor() * shape->specular;
             }
         }
         Color localColor = ambientColor + diffuseColor + specColor;

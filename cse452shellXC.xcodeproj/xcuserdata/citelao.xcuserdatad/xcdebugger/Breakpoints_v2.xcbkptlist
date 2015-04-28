@@ -383,7 +383,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "59"
             endingLineNumber = "59"
-            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations)"
+            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations, Shape* currentShape, double ior)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -426,12 +426,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "cse452shell/rendering/MyScene_render.cpp"
-            timestampString = "451881838.102254"
+            timestampString = "451885811.574152"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
-            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations)"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations, Shape* currentShape, double ior)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -443,12 +443,28 @@
             condition = "shape-&gt;reflect.getMax() &gt; 0.0000001"
             continueAfterRunningActions = "No"
             filePath = "cse452shell/rendering/MyScene_render.cpp"
-            timestampString = "451881838.102254"
+            timestampString = "451885811.574152"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations)"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations, Shape* currentShape, double ior)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "cse452shell/rendering/MyScene_render.cpp"
+            timestampString = "451886224.913933"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations, Shape* currentShape, double ior)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

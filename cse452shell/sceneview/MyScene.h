@@ -142,7 +142,9 @@ private:
     
     const int MAX_BOUNCES = 3;
     
-    Color cast(Point3 pt, Vector3 dir, int iterations = 0);
+    Color cast(Point3 pt, Vector3 dir,
+               int iterations = 0,
+               Shape* currentShape = nullptr, double ior = 1.0);
 };
 
 #endif /* _MY_SCENE_H_ */
