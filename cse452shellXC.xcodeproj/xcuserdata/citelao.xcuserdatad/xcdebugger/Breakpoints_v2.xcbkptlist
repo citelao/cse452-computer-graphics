@@ -426,11 +426,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "cse452shell/rendering/MyScene_render.cpp"
-            timestampString = "451873246.788661"
+            timestampString = "451881838.102254"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
             landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations)"
             landmarkType = "5">
          </BreakpointContent>
@@ -443,11 +443,11 @@
             condition = "shape-&gt;reflect.getMax() &gt; 0.0000001"
             continueAfterRunningActions = "No"
             filePath = "cse452shell/rendering/MyScene_render.cpp"
-            timestampString = "451876764.155494"
+            timestampString = "451881838.102254"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "MyScene::cast(Point3 pt, Vector3 dir, int iterations)"
             landmarkType = "5">
          </BreakpointContent>

@@ -57,9 +57,10 @@ Color MyScene::cast(Point3 pt, Vector3 dir, int iterations) {
     Color returnColor = Color(0,0,0);
     
     if(hr.getFirstHit(a, b, c, castpt, normal)) {
-        // Diffuse color
+        // Local color
+        Color ambientColor = shape->ambient;
         Color diffuseColor = Color(0,0,0);
-        // Color diffuseColor = shape->ambient;
+        Color specColor = Color(0,0,0);
         for (auto l : lights) {
             auto intersect = root->intersect(castpt, (l.getPos() - castpt).unit());
             auto hr = std::get<1>(intersect);
@@ -77,6 +78,9 @@ Color MyScene::cast(Point3 pt, Vector3 dir, int iterations) {
             }
             
             if(!hit || (hitpt - castpt).lengthSquared() > (l.getPos() - castpt).lengthSquared()) {
+                auto falloffv = l.getFalloff();
+                auto distance = (l.getPos() - castpt).length();
+                auto falloff = 1.0 / (falloffv[0] + falloffv[1] * distance  + falloffv[2] * distance * distance);
                 auto mult = ((l.getPos() - castpt).unit() * (normal));
                 
                 if(mult < 0) {
@@ -84,20 +88,22 @@ Color MyScene::cast(Point3 pt, Vector3 dir, int iterations) {
                     mult = 0;
                 }
                 
-                diffuseColor += mult * l.getColor() * shape->diffuse;
+                diffuseColor += mult * falloff * l.getColor() * shape->diffuse;
             }
         }
+        Color localColor = ambientColor + diffuseColor + specColor;
         
         // Reflection color
         auto reflectedDir = (dir - 2 * (dir * normal.unit()) * normal.unit()).unit();
-        Color reflectColor = diffuseColor;
+        Color reflectColor = localColor;
         if (iterations < MAX_BOUNCES && shape->reflect.getMax() > 0.0000001) {
             reflectColor = cast(castpt, reflectedDir, iterations + 1);
         }
         
         // Refraction
         
-        Color difPart = (Color(1,1,1) - shape->reflect) * diffuseColor;
+        
+        Color difPart = (Color(1,1,1) - shape->reflect) * localColor;
         Color refPart = (shape->reflect) * reflectColor;
         Color returnColor = difPart + refPart;
         
