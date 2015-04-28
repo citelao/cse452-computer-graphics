@@ -36,7 +36,7 @@ class Object : public IDrawable {
         void draw() const;
         std::tuple<const Object*, HitRecord> intersect(Point3 pt, Vector3 dir) const;
     
-        Color ambient = Color(0.2, 0.2, 0.2);
+        Color ambient = Color(0, 0, 0);
         Color diffuse = Color(0.8, 0.8, 0.8);
         Color specular = Color(0, 0, 0);
         Color emission = Color(0, 0, 0);

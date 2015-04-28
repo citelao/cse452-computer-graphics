@@ -95,7 +95,8 @@ Color MyScene::cast(Point3 pt, Vector3 dir, int iterations, Shape* currentShape,
                 auto lightRay = (l.getPos() - castpt).unit();
                 auto viewRay = (pt - castpt).unit();
                 auto reflectRay = (2 * (lightRay * normal.unit()) * normal.unit() - lightRay).unit();
-                auto specMult = pow(reflectRay * viewRay, shape->shininess);
+                auto rayViewDot = (reflectRay * viewRay < 0) ? 0 : reflectRay * viewRay;
+                auto specMult = pow(rayViewDot, shape->shininess);
                 
                 specColor += falloff * specMult * l.getColor() * shape->specular;
             }
